@@ -45,12 +45,12 @@ public class Battleroyale {
             if (event.getServer().getScoreboard().getObjective("zone") == null) {
                     event.getServer().getCommands().performPrefixedCommand(
                         event.getServer().createCommandSourceStack().withSuppressedOutput(),
-                        "scoreboard objectives add zone dummy \"§e大逃杀游戏状态\""
+                        "scoreboard objectives add zone dummy \"§eBattleRoyale\""
                     );
                     event.getServer().getCommands().performPrefixedCommand(
                             event.getServer().createCommandSourceStack().withSuppressedOutput(),
                         "scoreboard objectives setdisplay sidebar zone"
-                );
+                    );
             }
         });
     }
