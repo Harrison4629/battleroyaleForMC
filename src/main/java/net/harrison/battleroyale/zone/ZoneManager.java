@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ZoneManager {
     private static int currentZoneStage = 0;
-    private static ScheduledExecutorService scheduler;
+    private static ScheduledExecutorService countScheduler;
+    private static ScheduledExecutorService shrinkScheduler;
     private static boolean isRunning = false;
 
     /**
@@ -40,19 +41,19 @@ public class ZoneManager {
         currentZoneStage = stage;
 
 
-        
+
         // 获取当前圈的参数
         int currentSize = ZoneConfig.getZoneSize(stage);
         int nextSize = ZoneConfig.getZoneSize(stage + 1);
         int warningTime = ZoneConfig.getWarningTime(stage);
         int shrinkTime = ZoneConfig.getShrinkTime(stage);
-        
+
 
         // 设置worldborder初始大小和位置
         server.executeBlocking(() -> {
             level.getWorldBorder().setCenter(center.x, center.z);
             level.getWorldBorder().setSize(currentSize);
-            
+
             // 设置计分板显示倒计时
             server.getCommands().performPrefixedCommand(
                 server.createCommandSourceStack().withSuppressedOutput(),
@@ -67,11 +68,12 @@ public class ZoneManager {
         });
 
         // 启动倒计时和缩圈计时器
-        scheduler = Executors.newScheduledThreadPool(1);
+        countScheduler = Executors.newScheduledThreadPool(1);
+        shrinkScheduler = Executors.newScheduledThreadPool(1);
         isRunning = true;
 
         // 倒计时更新任务
-        scheduler.scheduleAtFixedRate(() -> {
+        countScheduler.scheduleAtFixedRate(() -> {
             server.executeBlocking(() -> {
                 int currentTime = getScoreboardValue(server, "shrink_in", "zone");
                 if (currentTime > 0) {
@@ -79,29 +81,30 @@ public class ZoneManager {
                         server.createCommandSourceStack().withSuppressedOutput(),
                         "scoreboard players remove shrink_in zone 1"
                     );
+                } else {
+                    countScheduler.shutdown();
+                    server.getCommands().performPrefixedCommand(
+                            server.createCommandSourceStack().withSuppressedOutput(),
+                            "scoreboard players reset shrink_in zone"
+                    );
                 }
             });
         }, 1, 1, TimeUnit.SECONDS);
 
         // 缩圈开始任务
-        scheduler.schedule(() -> {
+        shrinkScheduler.schedule(() -> {
             server.executeBlocking(() -> {
                 // 设置worldborder缩小
                 level.getWorldBorder().lerpSizeBetween(currentSize, nextSize, shrinkTime * 1000L);
-                
+
                 // 设置计分板显示缩圈持续时间
                 server.getCommands().performPrefixedCommand(
                     server.createCommandSourceStack().withSuppressedOutput(),
                     "scoreboard players set shrinking zone " + shrinkTime
                 );
-                server.getCommands().performPrefixedCommand(
-                        server.createCommandSourceStack().withSuppressedOutput(),
-                        "scoreboard players reset shrink_in zone"
-                );
 
-                
                 // 缩圈期间计时更新
-                scheduler.scheduleAtFixedRate(() -> {
+                shrinkScheduler.scheduleAtFixedRate(() -> {
                     server.executeBlocking(() -> {
                         int currentTime = getScoreboardValue(server, "shrinking", "zone");
                         if (currentTime > 0) {
@@ -109,25 +112,23 @@ public class ZoneManager {
                                 server.createCommandSourceStack().withSuppressedOutput(),
                                 "scoreboard players remove shrinking zone 1"
                             );
+                        } else {
+                            shrinkScheduler.shutdown();
+                            server.getCommands().performPrefixedCommand(
+                                    server.createCommandSourceStack().withSuppressedOutput(),
+                                    "scoreboard players reset shrinking zone"
+                            );
                         }
                     });
                 }, 1, 1, TimeUnit.SECONDS);
-                
-                // 缩圈结束任务
-                scheduler.schedule(() -> {
-                    server.executeBlocking(() -> {
-                        server.getPlayerList().broadcastSystemMessage(
-                            Component.literal("§a毒圈已稳定至第" + (stage + 1) + "圈！"),
-                            false
-                        );
-                        isRunning = false;
-                        scheduler.shutdown();
-                    });
-                }, shrinkTime, TimeUnit.SECONDS);
+
+
             });
         }, warningTime, TimeUnit.SECONDS);
 
-        source.sendSuccess(Component.literal("§a缩圈系统已启动！当前第" + stage + "圈，将缩小至第" + (stage + 1) + "圈"), true);
+
+
+        isRunning = false;
     }
 
 
@@ -157,8 +158,8 @@ public class ZoneManager {
             return;
         }
 
-        if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdown();
+        if (countScheduler != null && !countScheduler.isShutdown()) {
+            countScheduler.shutdown();
         }
         
         isRunning = false;
