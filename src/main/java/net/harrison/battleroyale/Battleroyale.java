@@ -41,16 +41,16 @@ public class Battleroyale {
         // 确保服务器启动时计分板已创建
         event.getServer().executeBlocking(() -> {
             // 检查计分板是否存在，如不存在则创建
-            try {
-                if (event.getServer().getScoreboard().getObjective("zone") == null) {
+
+            if (event.getServer().getScoreboard().getObjective("zone") == null) {
                     event.getServer().getCommands().performPrefixedCommand(
                         event.getServer().createCommandSourceStack().withSuppressedOutput(),
                         "scoreboard objectives add zone dummy \"§e大逃杀游戏状态\""
                     );
-                    LOGGER.info("大逃杀模组：已创建zone计分板");
-                }
-            } catch (Exception e) {
-                LOGGER.error("大逃杀模组：创建计分板时发生错误", e);
+                    event.getServer().getCommands().performPrefixedCommand(
+                            event.getServer().createCommandSourceStack().withSuppressedOutput(),
+                        "scoreboard objectives setdisplay sidebar zone"
+                );
             }
         });
     }

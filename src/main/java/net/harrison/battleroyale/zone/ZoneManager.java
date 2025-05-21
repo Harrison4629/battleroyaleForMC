@@ -94,6 +94,10 @@ public class ZoneManager {
                     server.createCommandSourceStack().withSuppressedOutput(),
                     "scoreboard players set shrinking zone " + shrinkTime
                 );
+                server.getCommands().performPrefixedCommand(
+                        server.createCommandSourceStack().withSuppressedOutput(),
+                        "scoreboard players reset shrink_in zone"
+                );
 
                 
                 // 缩圈期间计时更新
