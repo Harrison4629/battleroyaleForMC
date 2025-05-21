@@ -6,8 +6,8 @@ package net.harrison.battleroyale.config;
  */
 public class ZoneConfig {
     // 圈大小设置（从大到小）
-    public static final int ZONE_SIZE_1 = 200; // 第一圈大小
-    public static final int ZONE_SIZE_2 = 150; // 第二圈大小
+    public static final int ZONE_SIZE_1 = 300; // 第一圈大小
+    public static final int ZONE_SIZE_2 = 200; // 第二圈大小
     public static final int ZONE_SIZE_3 = 100; // 第三圈大小
     public static final int ZONE_SIZE_4 = 50;  // 第四圈大小
     public static final int ZONE_SIZE_5 = 25;  // 第五圈大小
@@ -23,9 +23,9 @@ public class ZoneConfig {
     // 各阶段缩圈持续时间（秒）
     public static final int ZONE_SHRINK_TIME_1 = 30; // 第一阶段缩圈持续时间
     public static final int ZONE_SHRINK_TIME_2 = 30;  // 第二阶段缩圈持续时间
-    public static final int ZONE_SHRINK_TIME_3 = 30;  // 第三阶段缩圈持续时间
-    public static final int ZONE_SHRINK_TIME_4 = 20;  // 第四阶段缩圈持续时间
-    public static final int ZONE_SHRINK_TIME_5 = 15;  // 第五阶段缩圈持续时间
+    public static final int ZONE_SHRINK_TIME_3 = 25;  // 第三阶段缩圈持续时间
+    public static final int ZONE_SHRINK_TIME_4 = 15;  // 第四阶段缩圈持续时间
+    public static final int ZONE_SHRINK_TIME_5 = 10;  // 第五阶段缩圈持续时间
     
     /**
      * 获取指定阶段的圈大小

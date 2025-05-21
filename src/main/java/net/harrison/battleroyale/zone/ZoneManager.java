@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -65,11 +66,11 @@ public class ZoneManager {
                 "scoreboard players set shrink_in zone " + warningTime
             );
 
-            // 广播消息
-            server.getPlayerList().broadcastSystemMessage(
-                Component.literal("§c警告：毒圈将在 §e" + warningTime + "§c 秒后开始缩小！"),
-                false
-            );
+        //    // 广播消息
+        //    server.getPlayerList().broadcastSystemMessage(
+        //        Component.literal("§c警告：毒圈将在 §e" + warningTime + "§c 秒后开始缩小！"),
+        //        false
+        //    );
         });
 
         // 启动倒计时和缩圈计时器
@@ -144,37 +145,39 @@ public class ZoneManager {
                     private static void handleShrinkingComplete(MinecraftServer server, ServerLevel level, int stage) {
                         int nextStage = stage + 1;
                         
-                        // 广播缩圈完成消息
-                        server.getPlayerList().broadcastSystemMessage(
-                            Component.literal("§a毒圈已稳定至第" + nextStage + "圈！"),
-                            false
-                        );
+                    //    // 广播缩圈完成消息
+                    //    server.getPlayerList().broadcastSystemMessage(
+                    //        Component.literal("§a毒圈已稳定至第" + nextStage + "圈！"),
+                    //        false
+                    //    );
                         
                         // 检查是否还有下一阶段
                         if (nextStage < 6) {
-                            // 广播下一阶段即将开始
-                            server.getPlayerList().broadcastSystemMessage(
-                Component.literal("§e10秒后将自动开始第" + nextStage + "圈的缩小！"),
-                false
-                            );
+                            Random random = new Random();
+                            int randomDelay = random.nextInt(11) + 10;
+            //                // 广播下一阶段即将开始
+            //                server.getPlayerList().broadcastSystemMessage(
+            //    Component.literal("§e10秒后将自动开始第" + nextStage + "圈的缩小！"),
+            //    false
+            //                );
                             
                             // 创建延迟任务
                             ScheduledExecutorService delayScheduler = Executors.newSingleThreadScheduledExecutor();
                             delayScheduler.schedule(() -> {
-                // 如果已被停止，不继续下一阶段
-                if (!isRunning) {
-                    delayScheduler.shutdown();
-                    return;
-                }
-                
-                // 递归调用启动下一阶段
-                server.executeBlocking(() -> {
-                    CommandSourceStack fakeSource = createFakeCommandSource(server, level);
-                    startShrinking(fakeSource, nextStage);
-                });
-                
-                delayScheduler.shutdown();
-                            }, 10, TimeUnit.SECONDS);
+                                        // 如果已被停止，不继续下一阶段
+                                        if (!isRunning) {
+                                            delayScheduler.shutdown();
+                                            return;
+                                        }
+                                        
+                                        // 递归调用启动下一阶段
+                                        server.executeBlocking(() -> {
+                                            CommandSourceStack fakeSource = createFakeCommandSource(server, level);
+                                            startShrinking(fakeSource, nextStage);
+                                        });
+                                        
+                                        delayScheduler.shutdown();
+                            }, randomDelay, TimeUnit.SECONDS);
                         } else {
                             // 所有阶段已完成
                             server.getPlayerList().broadcastSystemMessage(
@@ -311,6 +314,8 @@ public class ZoneManager {
                 // 缩圈结束任务
                 scheduler.schedule(() -> {
                     server.executeBlocking(() -> {
+                        Random random = new Random();
+                        int randomDelay = random.nextInt(11) + 10;
                         int nextStage = stage + 1;
                         //server.getPlayerList().broadcastSystemMessage(
                         //    Component.literal("§a毒圈已稳定至第" + nextStage + "圈！"),
@@ -332,13 +337,13 @@ public class ZoneManager {
                             nextStageScheduler.schedule(() -> {
                                 // 开始下一阶段缩圈
                                 startNextStage(server, level, nextStage);
-                            }, 10, TimeUnit.SECONDS);
+                            }, randomDelay, TimeUnit.SECONDS);
                         } else {
-                            // 最终圈已完成
-                            server.getPlayerList().broadcastSystemMessage(
-                                Component.literal("§6缩圈已完成！已达到最终安全区！"),
-                                false
-                            );
+                            //// 最终圈已完成
+                            //server.getPlayerList().broadcastSystemMessage(
+                            //    Component.literal("§6缩圈已完成！已达到最终安全区！"),
+                            //    false
+                            //);
                             isRunning = false;
                         }
                     });
@@ -379,6 +384,6 @@ public class ZoneManager {
         });
         
         isRunning = false;
-        source.sendSuccess(Component.literal("§a缩圈系统已停止！"), true);
+        //source.sendSuccess(Component.literal("§a缩圈系统已停止！"), true);
     }
 }
