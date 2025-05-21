@@ -1,0 +1,46 @@
+{
+  "itemGroup.battleroyalemodtab": "BattleRoyale物品",
+  "item.battleroyale.medkit": "医疗包",
+  "item.battleroyale.medkit.tooltip": "用于紧急治疗的医疗用品",
+  "item.battleroyale.medkit.tooltip.use": "按住右键不松回复12点生命值",
+  "item.battleroyale.medkit.heal_success": "治疗完成！",
+  "item.battleroyale.medkit.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.bandage": "绷带",
+  "item.battleroyale.bandage.tooltip": "用于紧急治疗的医疗用品",
+  "item.battleroyale.bandage.tooltip.use": "按住右键不松回复4点生命值",
+  "item.battleroyale.bandage.heal_success": "治疗完成！",
+  "item.battleroyale.bandage.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.regeneration_syringe": "再生注射器",
+  "item.battleroyale.regeneration_syringe.tooltip": "用于紧急治疗的医疗用品",
+  "item.battleroyale.regeneration_syringe.tooltip.use": "按住右键不松缓慢回复生命值",
+  "item.battleroyale.regeneration_syringe.heal_success": "注射完成！",
+  "item.battleroyale.regeneration_syringe.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.chameleon": "变色蜥蜴",
+  "item.battleroyale.chameleon.tooltip": "是变色蜥蜴！成为变色蜥蜴以获得隐形(注意：不要惊吓到蜥蜴！)",
+  "item.battleroyale.chameleon.tooltip.use": "按住右键以获得隐形",
+  "item.battleroyale.chameleon.heal_success": "你已成为变色蜥蜴，请勿让蜥蜴受惊！",
+  "item.battleroyale.chameleon.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.armor_plate_1": "基础护甲板",
+  "item.battleroyale.armor_plate_1.tooltip": "基础护甲板，提供最基础的保护",
+  "item.battleroyale.armor_plate_1.tooltip.use": "按住右键以装备",
+  "item.battleroyale.armor_plate_1.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.armor_plate_2": "改进型护甲板",
+  "item.battleroyale.armor_plate_2.tooltip": "改进护甲板，在基础之上进行强化，提供更好的抗击打能力和耐久性",
+  "item.battleroyale.armor_plate_2.tooltip.use": "按住右键以装备",
+  "item.battleroyale.armor_plate_2.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.armor_plate_3": "高级护甲板",
+  "item.battleroyale.armor_plate_3.tooltip": "高级护甲板，采用更优异的材料或技术，提供显著增强的保护",
+  "item.battleroyale.armor_plate_3.tooltip.use": "按住右键以装备",
+  "item.battleroyale.armor_plate_3.heal_fail": "按住的时间太短！",
+
+  "item.battleroyale.armor_plate_4": "顶级护甲板",
+  "item.battleroyale.armor_plate_4.tooltip": "顶级护甲板，由顶级工匠打造，品质卓越，提供顶级的保护效果",
+  "item.battleroyale.armor_plate_4.tooltip.use": "按住右键以装备",
+  "item.battleroyale.armor_plate_4.heal_fail": "按住的时间太短！"
+}
