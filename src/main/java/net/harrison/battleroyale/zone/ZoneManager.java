@@ -10,11 +10,11 @@ import net.minecraft.world.phys.Vec3;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -25,7 +25,7 @@ public class ZoneManager {
     // 每个世界独立的状态管理
     private static final Map<String, WorldZoneState> worldStates = new HashMap<>();
     private static final Logger LOGGER = Logger.getLogger("BattleRoyale");
-
+    
     /**
      * 每个世界的缩圈状态
      */
@@ -37,6 +37,10 @@ public class ZoneManager {
         double zoneCenterX = 0;
         double zoneCenterZ = 0;
         String worldId;
+        
+        // 计分板本地缓存，避免频繁查询服务器
+        int cachedShrinkInValue = 0;
+        int cachedShrinkingValue = 0;
 
         public WorldZoneState(String worldId) {
             this.worldId = worldId;
@@ -55,10 +59,11 @@ public class ZoneManager {
                 }
                 scheduledTasks.clear();
                 
-                // 关闭调度器
+                // 关闭调度器 - 使用优化的关闭方式
                 try {
                     scheduler.shutdown();
-                    if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    // 短等待时间，避免长时间阻塞
+                    if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
                         scheduler.shutdownNow();
                     }
                 } catch (InterruptedException e) {
@@ -71,11 +76,16 @@ public class ZoneManager {
         }
         
         /**
-         * 确保调度器已初始化
+         * 确保调度器已初始化 - 使用优化的线程池配置
          */
         public void ensureSchedulerInitialized() {
             if (scheduler == null || scheduler.isShutdown()) {
-                scheduler = Executors.newScheduledThreadPool(2);
+                // 创建适合该世界的线程池，只需要2个线程即可满足需求
+                scheduler = Executors.newScheduledThreadPool(2, r -> {
+                    Thread t = new Thread(r, "BattleRoyale-Zone-" + worldId);
+                    t.setDaemon(true); // 使用守护线程，避免阻止服务器关闭
+                    return t;
+                });
                 scheduledTasks.clear();
             }
         }
@@ -114,6 +124,15 @@ public class ZoneManager {
     }
     
     /**
+     * 获取计分板条目名称
+     * @param baseName 基本名称
+     * @return 计分板条目名称
+     */
+    private static String getScoreboardEntry(String baseName) {
+        return baseName;
+    }
+    
+    /**
      * 获取或创建世界状态
      * @param level 服务器世界
      * @return 世界缩圈状态对象
@@ -142,7 +161,7 @@ public class ZoneManager {
         
         // 如果已经在运行，先停止
         if (state.isRunning) {
-            stopWorldShrinking(state, server);
+            stopWorldShrinking(state, server, level);
         }
         
         // 直接使用命令执行者的位置作为中心点
@@ -158,84 +177,139 @@ public class ZoneManager {
         int nextSize = ZoneConfig.getZoneSize(stage + 1);
         int warningTime = ZoneConfig.getWarningTime(stage);
         int shrinkTime = ZoneConfig.getShrinkTime(stage);
+        
+        // 获取计分板条目名称
+        String shrinkInEntry = getScoreboardEntry("shrink_in");
+        String shrinkingEntry = getScoreboardEntry("shrinking");
 
-        // 设置worldborder初始大小和位置
-        server.executeBlocking(() -> {
-            level.getWorldBorder().setCenter(center.x, center.z);
-            level.getWorldBorder().setSize(currentSize);
-
-            // 设置计分板显示倒计时
-            server.getCommands().performPrefixedCommand(
-                server.createCommandSourceStack().withSuppressedOutput(),
-                "scoreboard players set shrink_in zone " + warningTime
-            );
-
-        //    // 广播消息
-        //    server.getPlayerList().broadcastSystemMessage(
-        //        Component.literal("§c警告：毒圈将在 §e" + warningTime + "§c 秒后开始缩小！"),
-        //        false
-        //    );
-        });
+        try {
+            // 设置worldborder初始大小和位置 - 使用异步任务队列而非直接阻塞
+            server.submit(() -> {
+                try {
+                    level.getWorldBorder().setCenter(center.x, center.z);
+                    level.getWorldBorder().setSize(currentSize);
+    
+                    // 设置计分板显示倒计时
+                    server.getCommands().performPrefixedCommand(
+                        server.createCommandSourceStack().withSuppressedOutput(),
+                        "scoreboard players set " + shrinkInEntry + " zone " + warningTime
+                    );
+                    
+                    // 初始化缓存值
+                    state.cachedShrinkInValue = warningTime;
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, "设置世界边界时出错", e);
+                }
+            });
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "提交任务到服务器时出错", e);
+            return;
+        }
 
         // 确保调度器已初始化
         state.ensureSchedulerInitialized();
         state.isRunning = true;
 
-        // 倒计时更新任务
+        // 倒计时更新任务 - 每秒更新一次
         ScheduledFuture<?> countTask = state.scheduler.scheduleAtFixedRate(() -> {
-            server.executeBlocking(() -> {
-                int currentTime = getScoreboardValue(server, "shrink_in", "zone");
-                if (currentTime > 0) {
-                    server.getCommands().performPrefixedCommand(
-                        server.createCommandSourceStack().withSuppressedOutput(),
-                        "scoreboard players remove shrink_in zone 1"
-                    );
+            try {
+                // 本地递减计数，减少服务器交互
+                if (state.cachedShrinkInValue > 0) {
+                    state.cachedShrinkInValue--;
+                    
+                    // 每秒都更新计分板，确保实时性
+                    server.submit(() -> {
+                        try {
+                            server.getCommands().performPrefixedCommand(
+                                server.createCommandSourceStack().withSuppressedOutput(),
+                                "scoreboard players set " + shrinkInEntry + " zone " + state.cachedShrinkInValue
+                            );
+                        } catch (Exception e) {
+                            LOGGER.log(Level.WARNING, "更新计分板时出错", e);
+                        }
+                    });
                 } else {
                     state.cancelTask("countTask");
-                    server.getCommands().performPrefixedCommand(
-                        server.createCommandSourceStack().withSuppressedOutput(),
-                        "scoreboard players reset shrink_in zone"
-                    );
+                    server.submit(() -> {
+                        try {
+                            server.getCommands().performPrefixedCommand(
+                                server.createCommandSourceStack().withSuppressedOutput(),
+                                "scoreboard players reset " + shrinkInEntry + " zone"
+                            );
+                        } catch (Exception e) {
+                            LOGGER.log(Level.WARNING, "重置计分板时出错", e);
+                        }
+                    });
                 }
-            });
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "倒计时任务出错", e);
+            }
         }, 1, 1, TimeUnit.SECONDS);
         state.addTask("countTask", countTask);
 
         // 缩圈开始任务
         ScheduledFuture<?> shrinkStartTask = state.scheduler.schedule(() -> {
-            server.executeBlocking(() -> {
-                // 设置worldborder缩小
-                level.getWorldBorder().lerpSizeBetween(currentSize, nextSize, shrinkTime * 1000L);
+            try {
+                server.submit(() -> {
+                    try {
+                        // 设置worldborder缩小
+                        level.getWorldBorder().lerpSizeBetween(currentSize, nextSize, shrinkTime * 1000L);
+    
+                        // 设置计分板显示缩圈持续时间
+                        server.getCommands().performPrefixedCommand(
+                            server.createCommandSourceStack().withSuppressedOutput(),
+                            "scoreboard players set " + shrinkingEntry + " zone " + shrinkTime
+                        );
+                        
+                        // 初始化缓存值
+                        state.cachedShrinkingValue = shrinkTime;
+                    } catch (Exception e) {
+                        LOGGER.log(Level.SEVERE, "开始缩圈时出错", e);
+                    }
+                });
 
-                // 设置计分板显示缩圈持续时间
-                server.getCommands().performPrefixedCommand(
-                    server.createCommandSourceStack().withSuppressedOutput(),
-                    "scoreboard players set shrinking zone " + shrinkTime
-                );
-
-                // 缩圈期间计时更新
+                // 缩圈期间计时更新 - 减少更新频率
                 ScheduledFuture<?> shrinkUpdateTask = state.scheduler.scheduleAtFixedRate(() -> {
-                    server.executeBlocking(() -> {
-                        int currentTime = getScoreboardValue(server, "shrinking", "zone");
-                        if (currentTime > 0) {
-                            server.getCommands().performPrefixedCommand(
-                                server.createCommandSourceStack().withSuppressedOutput(),
-                                "scoreboard players remove shrinking zone 1"
-                            );
+                    try {
+                        // 本地递减计数，减少服务器交互
+                        if (state.cachedShrinkingValue > 0) {
+                            state.cachedShrinkingValue--;
+                            
+                            // 每秒都更新计分板，确保实时性
+                            server.submit(() -> {
+                                try {
+                                    server.getCommands().performPrefixedCommand(
+                                        server.createCommandSourceStack().withSuppressedOutput(),
+                                        "scoreboard players set " + shrinkingEntry + " zone " + state.cachedShrinkingValue
+                                    );
+                                } catch (Exception e) {
+                                    LOGGER.log(Level.WARNING, "更新缩圈计分板时出错", e);
+                                }
+                            });
                         } else {
                             state.cancelTask("shrinkUpdateTask");
-                            server.getCommands().performPrefixedCommand(
-                                server.createCommandSourceStack().withSuppressedOutput(),
-                                "scoreboard players reset shrinking zone"
-                            );
-                            
-                            // 缩圈结束后的处理
-                            handleShrinkingComplete(server, level, stage);
+                            server.submit(() -> {
+                                try {
+                                    server.getCommands().performPrefixedCommand(
+                                        server.createCommandSourceStack().withSuppressedOutput(),
+                                        "scoreboard players reset " + shrinkingEntry + " zone"
+                                    );
+                                    
+                                    // 缩圈结束后的处理
+                                    handleShrinkingComplete(server, level, stage);
+                                } catch (Exception e) {
+                                    LOGGER.log(Level.SEVERE, "缩圈结束处理时出错", e);
+                                }
+                            });
                         }
-                    });
+                    } catch (Exception e) {
+                        LOGGER.log(Level.SEVERE, "缩圈更新任务出错", e);
+                    }
                 }, 1, 1, TimeUnit.SECONDS);
                 state.addTask("shrinkUpdateTask", shrinkUpdateTask);
-            });
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "缩圈启动任务出错", e);
+            }
         }, warningTime, TimeUnit.SECONDS);
         state.addTask("shrinkStartTask", shrinkStartTask);
     }
@@ -250,34 +324,31 @@ public class ZoneManager {
         WorldZoneState state = getWorldState(level);
         int nextStage = stage + 1;
         
-    //    // 广播缩圈完成消息
-    //    server.getPlayerList().broadcastSystemMessage(
-    //        Component.literal("§a毒圈已稳定至第" + nextStage + "圈！"),
-    //        false
-    //    );
-        
         // 检查是否还有下一阶段
         if (nextStage < 6) {
             Random random = new Random();
             int randomDelay = random.nextInt(11) + 10;
-//                // 广播下一阶段即将开始
-//                server.getPlayerList().broadcastSystemMessage(
-//    Component.literal("§e10秒后将自动开始第" + nextStage + "圈的缩小！"),
-//    false
-//                );
             
             // 创建延迟任务
             ScheduledFuture<?> delayTask = state.scheduler.schedule(() -> {
-                // 如果已被停止，不继续下一阶段
-                if (!state.isRunning) {
-                    return;
+                try {
+                    // 如果已被停止，不继续下一阶段
+                    if (!state.isRunning) {
+                        return;
+                    }
+                    
+                    // 递归调用启动下一阶段
+                    server.submit(() -> {
+                        try {
+                            CommandSourceStack fakeSource = createFakeCommandSource(server, level, state);
+                            startShrinking(fakeSource, nextStage);
+                        } catch (Exception e) {
+                            LOGGER.log(Level.SEVERE, "启动下一阶段缩圈时出错", e);
+                        }
+                    });
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, "延迟任务出错", e);
                 }
-                
-                // 递归调用启动下一阶段
-                server.executeBlocking(() -> {
-                    CommandSourceStack fakeSource = createFakeCommandSource(server, level, state);
-                    startShrinking(fakeSource, nextStage);
-                });
             }, randomDelay, TimeUnit.SECONDS);
             state.addTask("delayTask", delayTask);
         } else {
@@ -304,7 +375,6 @@ public class ZoneManager {
             .withLevel(level);
     }
 
-
     /**
      * 获取计分板上的值
      * @param server Minecraft服务器实例
@@ -317,6 +387,7 @@ public class ZoneManager {
             return server.getScoreboard().getOrCreatePlayerScore(name, 
                 server.getScoreboard().getObjective(objective)).getScore();
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "获取计分板值时出错: " + e.getMessage());
             return 0;
         }
     }
@@ -325,8 +396,9 @@ public class ZoneManager {
      * 停止指定世界的缩圈系统
      * @param state 世界状态
      * @param server Minecraft服务器实例
+     * @param level 服务器世界
      */
-    private static void stopWorldShrinking(WorldZoneState state, MinecraftServer server) {
+    private static void stopWorldShrinking(WorldZoneState state, MinecraftServer server, ServerLevel level) {
         if (!state.isRunning) {
             return;
         }
@@ -334,17 +406,29 @@ public class ZoneManager {
         // 关闭所有调度器任务
         state.shutdown();
         
+        // 获取计分板条目名称
+        String shrinkInEntry = getScoreboardEntry("shrink_in");
+        String shrinkingEntry = getScoreboardEntry("shrinking");
+        
         // 清除计分板
-        server.executeBlocking(() -> {
-            server.getCommands().performPrefixedCommand(
-                server.createCommandSourceStack().withSuppressedOutput(),
-                "scoreboard players reset shrink_in zone"
-            );
-            server.getCommands().performPrefixedCommand(
-                server.createCommandSourceStack().withSuppressedOutput(),
-                "scoreboard players reset shrinking zone"
-            );
-        });
+        try {
+            server.submit(() -> {
+                try {
+                    server.getCommands().performPrefixedCommand(
+                        server.createCommandSourceStack().withSuppressedOutput(),
+                        "scoreboard players reset " + shrinkInEntry + " zone"
+                    );
+                    server.getCommands().performPrefixedCommand(
+                        server.createCommandSourceStack().withSuppressedOutput(),
+                        "scoreboard players reset " + shrinkingEntry + " zone"
+                    );
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "清除计分板时出错", e);
+                }
+            });
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "提交清除计分板任务时出错", e);
+        }
     }
     
     /**
@@ -360,8 +444,7 @@ public class ZoneManager {
             return;
         }
 
-        stopWorldShrinking(state, source.getServer());
-        //source.sendSuccess(Component.literal("§a缩圈系统已停止！"), true);
+        stopWorldShrinking(state, source.getServer(), level);
     }
     
     /**
@@ -369,6 +452,7 @@ public class ZoneManager {
      * 应在服务器关闭时调用
      */
     public static void cleanupAllWorlds() {
+        LOGGER.info("正在清理所有世界的缩圈系统资源...");
         for (WorldZoneState state : worldStates.values()) {
             state.shutdown();
         }
