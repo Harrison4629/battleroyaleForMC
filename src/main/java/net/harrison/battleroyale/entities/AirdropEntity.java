@@ -184,10 +184,6 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
         this.entityData.set(ANIMATION_TIME, time);
     }
 
-    public boolean hasLanded() {
-        return this.hasLanded;
-    }
-
     @Override
     public boolean canCollideWith(Entity entity) {
         // 确保玩家和其他实体无法穿过空投
@@ -212,11 +208,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
         return false;
     }
     
-    @Override
-    public boolean isPushedByFluid() {
-        // 防止被流体推动
-        return false;
-    }
+
     
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
