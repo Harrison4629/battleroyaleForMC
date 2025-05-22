@@ -23,6 +23,7 @@ public class ModEntities {
                     .sized(2.0F, 2.0F)  // 设置碰撞箱大小
                     .clientTrackingRange(10)
                     .updateInterval(3)
+                    .fireImmune()  // 使实体防火
                     .build(new ResourceLocation(Battleroyale.MODID, "airdrop").toString()));
 
     public static void register(IEventBus eventBus) {

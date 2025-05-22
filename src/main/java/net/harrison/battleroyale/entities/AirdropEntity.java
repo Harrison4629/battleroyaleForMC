@@ -18,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +55,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
         super(entityType, level);
         this.blocksBuilding = true;
         this.noPhysics = false; // 确保应用物理碰撞
+        this.setBoundingBox(this.makeBoundingBox()); // 确保边界盒正确设置
     }
 
     @Override
@@ -108,7 +110,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
                 // 播放着陆音效
                 this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
                         SoundEvents.WOOD_FALL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                
+
                 // 初始化战利品表
                 if (this.lootTable == null) {
                     this.setLootTable(AIRDROP_LOOT_TABLE, this.random.nextLong());
@@ -148,11 +150,21 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        // 空投不能被普通方式破坏
+        // 空投只能被创造模式玩家破坏
         if (source.getEntity() instanceof Player && ((Player) source.getEntity()).isCreative()) {
             this.remove(RemovalReason.KILLED);
             return true;
         }
+        
+        // 当投掷物击中时，将其反弹或消除，但不造成伤害
+        // 播放反弹音效
+        if (source.is(DamageTypeTags.IS_PROJECTILE) && !this.level.isClientSide) {
+            this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
+                    SoundEvents.SHIELD_BLOCK, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+
+
+        // 对于爆炸伤害，也不造成伤害
         return false;
     }
 
@@ -186,6 +198,35 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
     public boolean canBeCollidedWith() {
         // 使空投可以被碰撞
         return true;
+    }
+    
+    @Override
+    public boolean isPickable() {
+        // 确保实体可以被弓箭等投掷物命中
+        return true;
+    }
+    
+    @Override
+    public boolean isPushable() {
+        // 防止被活塞推动
+        return false;
+    }
+    
+    @Override
+    public boolean isPushedByFluid() {
+        // 防止被流体推动
+        return false;
+    }
+    
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        // 空投不会被以下伤害源损坏
+        return source.is(DamageTypeTags.IS_PROJECTILE) ||
+               source.is(DamageTypeTags.IS_EXPLOSION) ||
+               source.is(DamageTypeTags.IS_FIRE) ||
+               source.is(DamageTypeTags.IS_FALL) ||
+               source.is(DamageTypeTags.BYPASSES_ARMOR) ||
+               super.isInvulnerableTo(source);
     }
 
     @Override
