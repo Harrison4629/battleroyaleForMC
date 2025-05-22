@@ -4,10 +4,12 @@ import com.mojang.logging.LogUtils;
 import net.harrison.battleroyale.command.ModCommands;
 import net.harrison.battleroyale.items.ModCreativeModeTab;
 import net.harrison.battleroyale.items.ModItems;
+import net.harrison.battleroyale.zone.ZoneManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,7 +43,6 @@ public class Battleroyale {
         // 确保服务器启动时计分板已创建
         event.getServer().executeBlocking(() -> {
             // 检查计分板是否存在，如不存在则创建
-
             if (event.getServer().getScoreboard().getObjective("zone") == null) {
                     event.getServer().getCommands().performPrefixedCommand(
                         event.getServer().createCommandSourceStack().withSuppressedOutput(),
@@ -53,6 +54,13 @@ public class Battleroyale {
                     );
             }
         });
+    }
+    
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppingEvent event) {
+        // 服务器关闭时清理资源
+        LOGGER.info("清理BattleRoyale缩圈系统资源...");
+        ZoneManager.cleanupAllWorlds();
     }
 
     //创造模式背包模组物品在此添加
