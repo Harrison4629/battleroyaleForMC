@@ -1,22 +1,39 @@
 package net.harrison.battleroyale.entities;
 
+import net.harrison.battleroyale.Battleroyale;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.network.NetworkHooks;
 
-public class AirdropEntity extends Entity {
+import javax.annotation.Nullable;
+
+public class AirdropEntity extends Entity implements Container, MenuProvider {
     private static final EntityDataAccessor<Boolean> OPENED = SynchedEntityData.defineId(AirdropEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> ANIMATION_TIME = SynchedEntityData.defineId(AirdropEntity.class, EntityDataSerializers.INT);
 
@@ -24,6 +41,14 @@ public class AirdropEntity extends Entity {
     private static final double FALL_SPEED = 0.05D;
     // 是否已经着陆
     private boolean hasLanded = false;
+    
+    // 空投战利品表
+    public static final ResourceLocation AIRDROP_LOOT_TABLE = new ResourceLocation(Battleroyale.MODID, "chests/airdrop");
+    
+    // 容器相关
+    private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+    private ResourceLocation lootTable;
+    private long lootTableSeed;
 
     public AirdropEntity(EntityType<? extends AirdropEntity> entityType, Level level) {
         super(entityType, level);
@@ -42,6 +67,14 @@ public class AirdropEntity extends Entity {
         this.setOpened(compound.getBoolean("Opened"));
         this.setAnimationTime(compound.getInt("AnimationTime"));
         this.hasLanded = compound.getBoolean("HasLanded");
+        
+        if (compound.contains("LootTable", 8)) {
+            this.lootTable = new ResourceLocation(compound.getString("LootTable"));
+            this.lootTableSeed = compound.getLong("LootTableSeed");
+        } else {
+            this.lootTable = null;
+            ContainerHelper.loadAllItems(compound, this.items);
+        }
     }
 
     @Override
@@ -49,6 +82,13 @@ public class AirdropEntity extends Entity {
         compound.putBoolean("Opened", this.isOpened());
         compound.putInt("AnimationTime", this.getAnimationTime());
         compound.putBoolean("HasLanded", this.hasLanded);
+        
+        if (this.lootTable != null) {
+            compound.putString("LootTable", this.lootTable.toString());
+            compound.putLong("LootTableSeed", this.lootTableSeed);
+        } else {
+            ContainerHelper.saveAllItems(compound, this.items);
+        }
     }
 
     @Override
@@ -68,6 +108,11 @@ public class AirdropEntity extends Entity {
                 // 播放着陆音效
                 this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
                         SoundEvents.WOOD_FALL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                
+                // 初始化战利品表
+                if (this.lootTable == null) {
+                    this.setLootTable(AIRDROP_LOOT_TABLE, this.random.nextLong());
+                }
             } else {
                 // 下落
                 this.setDeltaMovement(0, -FALL_SPEED, 0);
@@ -83,15 +128,18 @@ public class AirdropEntity extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!this.level.isClientSide && !this.isOpened() && this.hasLanded) {
-            this.setOpened(true);
-            // 播放开箱音效
-            this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-
-            // 这里可以生成物品掉落
-            // TODO: 实现物品掉落逻辑
-
+        if (!this.level.isClientSide && this.hasLanded) {
+            if (!this.isOpened()) {
+                this.setOpened(true);
+                // 播放开箱音效
+                this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
+                        SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+            
+            // 打开容器界面
+            NetworkHooks.openScreen((net.minecraft.server.level.ServerPlayer) player, this, 
+                    buf -> buf.writeInt(this.getId()));
+            
             return InteractionResult.SUCCESS;
         }
 
@@ -158,6 +206,103 @@ public class AirdropEntity extends Entity {
         return 1.5D;
     }
     
+    // 实现Container接口方法
+    @Override
+    public int getContainerSize() {
+        return 27;
+    }
 
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack itemstack : this.items) {
+            if (!itemstack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int index) {
+        this.unpackLootTable(null);
+        return this.items.get(index);
+    }
+
+    @Override
+    public ItemStack removeItem(int index, int count) {
+        this.unpackLootTable(null);
+        return ContainerHelper.removeItem(this.items, index, count);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int index) {
+        this.unpackLootTable(null);
+        ItemStack itemstack = this.items.get(index);
+        if (itemstack.isEmpty()) {
+            return ItemStack.EMPTY;
+        } else {
+            this.items.set(index, ItemStack.EMPTY);
+            return itemstack;
+        }
+    }
+
+    @Override
+    public void setItem(int index, ItemStack stack) {
+        this.unpackLootTable(null);
+        this.items.set(index, stack);
+        if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
+        }
+    }
+
+    @Override
+    public void setChanged() {
+        // 容器内容改变时调用
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return this.isAlive() && player.distanceToSqr(this) <= 64.0D;
+    }
+
+    @Override
+    public void clearContent() {
+        this.unpackLootTable(null);
+        this.items.clear();
+    }
+    
+    // 实现MenuProvider接口方法
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable("entity." + Battleroyale.MODID + ".airdrop");
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        this.unpackLootTable(player);
+        return ChestMenu.threeRows(id, playerInventory, this);
+    }
+    
+    // 战利品表相关方法
+    public void setLootTable(ResourceLocation lootTableId, long seed) {
+        this.lootTable = lootTableId;
+        this.lootTableSeed = seed;
+    }
+    
+    public void unpackLootTable(@Nullable Player player) {
+        if (this.lootTable != null && this.level.getServer() != null) {
+            LootTable loottable = this.level.getServer().getLootTables().get(this.lootTable);
+            this.lootTable = null;
+            
+            LootContext.Builder builder = new LootContext.Builder((net.minecraft.server.level.ServerLevel)this.level)
+                    .withParameter(LootContextParams.ORIGIN, this.position());
+            
+            if (player != null) {
+                builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
+            }
+            
+            loottable.fill(this, builder.create(LootContextParamSets.CHEST));
+        }
+    }
 }
 
