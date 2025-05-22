@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-
+import net.harrison.battleroyale.entities.ModEntities;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Battleroyale.MODID)
 public class Battleroyale {
@@ -27,6 +27,9 @@ public class Battleroyale {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.ITEMS.register(modEventBus);
+        ModEntities.register(modEventBus);
+
+
 
         modEventBus.addListener(this::addCreative);
 
@@ -62,6 +65,7 @@ public class Battleroyale {
         LOGGER.info("清理BattleRoyale缩圈系统资源...");
         ZoneManager.cleanupAllWorlds();
     }
+
 
     //创造模式背包模组物品在此添加
     @SubscribeEvent
