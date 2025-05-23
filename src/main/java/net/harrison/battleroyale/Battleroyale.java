@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import net.harrison.battleroyale.entities.ModEntities;
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(Battleroyale.MODID)
 public class Battleroyale {
 
