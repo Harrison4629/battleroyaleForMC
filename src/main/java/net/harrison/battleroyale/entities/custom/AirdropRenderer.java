@@ -31,11 +31,7 @@ public class AirdropRenderer extends EntityRenderer<AirdropEntity> {
         // 根据实体的朝向旋转
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - entityYaw));
 
-        // 开箱动画
-        if (entity.isOpened()) {
-            float animationProgress = Math.min(1.0F, (entity.getAnimationTime() + partialTicks) / 20.0F);
-            // 这里可以添加开箱动画效果，例如箱盖打开等
-        }
+
         // 渲染模型
         this.model.renderToBuffer(
             poseStack,
