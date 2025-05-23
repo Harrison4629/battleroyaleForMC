@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.harrison.battleroyale.Battleroyale;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -27,7 +26,7 @@ public class AirdropRenderer extends EntityRenderer<AirdropEntity> {
 
 
         poseStack.translate(0.0F, -1.5F, 0.0F); // 调整高度，使模型居中
-        poseStack.scale(1.0F, 1.0F, 1.0F); // Y轴翻转，解决上下颠倒
+        poseStack.scale(1.0F, 1.0F, 1.0F);
 
         // 根据实体的朝向旋转
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - entityYaw));

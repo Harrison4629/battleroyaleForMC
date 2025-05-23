@@ -43,8 +43,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
     // 是否已经着陆
     private boolean hasLanded = false;
     
-    // 空投战利品表
-    public static final ResourceLocation AIRDROP_LOOT_TABLE = new ResourceLocation(Battleroyale.MODID, "chests/airdrop");
+
     
     // 容器相关
     private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
@@ -55,7 +54,6 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
         super(entityType, level);
         this.blocksBuilding = true;
         this.noPhysics = false; // 确保应用物理碰撞
-        this.setBoundingBox(this.makeBoundingBox()); // 确保边界盒正确设置
     }
 
     @Override
@@ -111,10 +109,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
                 this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
                         SoundEvents.WOOD_FALL, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-                // 初始化战利品表
-                if (this.lootTable == null) {
-                    this.setLootTable(AIRDROP_LOOT_TABLE, this.random.nextLong());
-                }
+
             } else {
                 // 下落
                 this.setDeltaMovement(0, -FALL_SPEED, 0);
@@ -130,7 +125,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!this.level.isClientSide && this.hasLanded) {
+        if (!this.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
             if (!this.isOpened()) {
                 this.setOpened(true);
                 // 播放开箱音效
@@ -233,11 +228,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
         return dimensions.height * 0.85F;
     }
 
-    @Override
-    public double getPassengersRidingOffset() {
-        // 如果有实体骑乘空投，设置它们的垂直偏移量
-        return 1.5D;
-    }
+
     
     // 实现Container接口方法
     @Override
@@ -316,11 +307,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider {
         return ChestMenu.threeRows(id, playerInventory, this);
     }
     
-    // 战利品表相关方法
-    public void setLootTable(ResourceLocation lootTableId, long seed) {
-        this.lootTable = lootTableId;
-        this.lootTableSeed = seed;
-    }
+
     
     public void unpackLootTable(@Nullable Player player) {
         if (this.lootTable != null && this.level.getServer() != null) {
