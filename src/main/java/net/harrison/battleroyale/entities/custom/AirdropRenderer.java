@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.entities;
+package net.harrison.battleroyale.entities.custom;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

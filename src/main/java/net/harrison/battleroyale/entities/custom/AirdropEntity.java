@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.entities;
+package net.harrison.battleroyale.entities.custom;
 
 import net.harrison.battleroyale.Battleroyale;
 import net.minecraft.core.NonNullList;

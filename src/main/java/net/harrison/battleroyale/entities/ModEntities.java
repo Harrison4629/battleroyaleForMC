@@ -1,11 +1,13 @@
 package net.harrison.battleroyale.entities;
 
 import net.harrison.battleroyale.Battleroyale;
+import net.harrison.battleroyale.entities.custom.AirdropEntity;
+import net.harrison.battleroyale.entities.custom.AirdropModel;
+import net.harrison.battleroyale.entities.custom.AirdropRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
