@@ -20,13 +20,13 @@ public class BandageItem extends AbstractUsableItem {
         player.heal(HEALING_AMOUNT);
         
         // 显示成功使用消息
-        player.displayClientMessage(Component.translatable("item.battleroyale.bandage.heal_success")
+        player.displayClientMessage(Component.translatable("item.battleroyale.bandage.use_success")
                 .withStyle(ChatFormatting.GREEN), true);
     }
 
     @Override
     protected String getFailTranslationKey() {
-        return "item.battleroyale.bandage.heal_fail";
+        return "item.battleroyale.bandage.ues_fail";
     }
 
     @Override

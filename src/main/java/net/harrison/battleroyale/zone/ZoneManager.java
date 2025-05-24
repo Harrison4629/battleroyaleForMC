@@ -236,7 +236,6 @@ public class ZoneManager {
                 safeSubmit(server, () -> resetScoreboardValue(server, ScoreboardConstants.SHRINK_IN_ENTRY));
             }
         }, 1, 1, TimeUnit.SECONDS);
-        
         taskManager.setCountdownTask(task);
     }
     
@@ -357,7 +356,6 @@ public class ZoneManager {
                     CommandSourceStack fakeSource = createFakeCommandSource(server);
                     startShrinking(fakeSource, nextStage);
                 });
-                
             }, randomDelay, TimeUnit.SECONDS);
             
             taskManager.setDelayTask(task);
@@ -419,7 +417,6 @@ public class ZoneManager {
              }
          });
     }
-    
 
     //服务器关闭时清理所有资源
     public static void cleanupAllWorlds() {
@@ -427,5 +424,4 @@ public class ZoneManager {
         isRunning = false;
         currentState = ZoneState.IDLE;
     }
-
 }

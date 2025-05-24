@@ -287,6 +287,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         this.entityData.define(HAS_LANDED, false);
     }
 
+    @SuppressWarnings("removal")
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         // 从NBT中读取数据，当世界加载时调用

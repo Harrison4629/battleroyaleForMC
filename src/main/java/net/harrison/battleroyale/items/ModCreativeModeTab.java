@@ -18,6 +18,5 @@ public class ModCreativeModeTab {
         BATTLEROYALEMOD = event.registerCreativeModeTab(new ResourceLocation(Battleroyale.MODID,"battleroyalemodtab"),
                 builder -> builder.icon(() -> new ItemStack(ModItems.MEDKIT.get())).title(Component.translatable("itemGroup.battleroyalemodtab")).build());
 
-
     }
 }

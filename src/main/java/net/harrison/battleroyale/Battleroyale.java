@@ -45,7 +45,6 @@ public class Battleroyale {
     public void onServerStarted(ServerStartedEvent event) {
         // 确保服务器启动时计分板已创建
         event.getServer().executeBlocking(() -> {
-            // 检查计分板是否存在，如不存在则创建
             if (event.getServer().getScoreboard().getObjective("zone") == null) {
                     event.getServer().getCommands().performPrefixedCommand(
                         event.getServer().createCommandSourceStack().withSuppressedOutput(),
@@ -69,7 +68,6 @@ public class Battleroyale {
         LOGGER.info("清理BattleRoyale缩圈系统资源...");
         ZoneManager.cleanupAllWorlds();
     }
-
 
     //创造模式背包模组物品在此添加
     @SubscribeEvent

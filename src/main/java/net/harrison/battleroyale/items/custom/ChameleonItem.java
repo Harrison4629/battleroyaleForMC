@@ -37,13 +37,13 @@ public class ChameleonItem extends AbstractUsableItem {
         INVISIBLE_PLAYERS.put(player.getUUID(), System.currentTimeMillis() + (INVISIBILITY_DURATION * 50)); // 转换为毫秒
         
         // 显示成功使用消息
-        player.displayClientMessage(Component.translatable("item.battleroyale.chameleon.heal_success")
+        player.displayClientMessage(Component.translatable("item.battleroyale.chameleon.use_success")
                 .withStyle(ChatFormatting.GREEN), true);
     }
 
     @Override
     protected String getFailTranslationKey() {
-        return "item.battleroyale.chameleon.heal_fail";
+        return "item.battleroyale.chameleon.use_fail";
     }
 
     @Override
@@ -60,12 +60,12 @@ public class ChameleonItem extends AbstractUsableItem {
     protected UseAnim getItemUseAnimation() {
         return UseAnim.BRUSH;
     }
-    
+
     @Override
-    protected SoundEvent getUseSound() {
+    public SoundEvent getUsingSound() {
         return SoundEvents.PHANTOM_FLAP;
     }
-    
+
     @Override
     protected SoundEvent getFinishSound() {
         return SoundEvents.PHANTOM_FLAP;

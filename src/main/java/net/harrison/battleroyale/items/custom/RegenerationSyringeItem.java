@@ -23,16 +23,16 @@ public class RegenerationSyringeItem extends AbstractUsableItem {
     @Override
     protected void applyEffect(Player player, Level level) {
         // 添加再生效果 - 40秒持续时间
-        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGEN_DURATION, 0, false, false));
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGEN_DURATION, 1, false, false));
         
         // 显示成功使用消息
-        player.displayClientMessage(Component.translatable("item.battleroyale.regeneration_syringe.heal_success")
-                .withStyle(ChatFormatting.GREEN), true);
+        player.displayClientMessage(Component.translatable("item.battleroyale.regeneration_syringe.use_success")
+                .withStyle(ChatFormatting.YELLOW), true);
     }
 
     @Override
     protected String getFailTranslationKey() {
-        return "item.battleroyale.regeneration_syringe.heal_fail";
+        return "item.battleroyale.regeneration_syringe.use_fail";
     }
 
     @Override
@@ -50,6 +50,16 @@ public class RegenerationSyringeItem extends AbstractUsableItem {
         return SoundEvents.PLAYER_HURT_SWEET_BERRY_BUSH;
     }
     
+    @Override
+    public SoundEvent getUsingSound() {
+        return SoundEvents.DISPENSER_DISPENSE;
+    }
+
+    @Override
+    public float volume() {
+        return 0.1F;
+    }
+
     @Override
     protected ParticleOptions getParticleType() {
         return ParticleTypes.EFFECT;

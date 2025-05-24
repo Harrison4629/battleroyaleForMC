@@ -8,8 +8,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Iterator;
-import java.util.Map;
 
 @Mod.EventBusSubscriber
 public class ChameleonEvents {
@@ -26,9 +24,8 @@ public class ChameleonEvents {
     
     @SubscribeEvent
     public static void onPlayerHurt(LivingHurtEvent event) {
-        if (!event.getEntity().level.isClientSide() && event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            
+        if (!event.getEntity().level.isClientSide() && event.getEntity() instanceof Player player) {
+
             // 如果玩家处于隐身状态并且受到伤害
             if (ChameleonItem.INVISIBLE_PLAYERS.containsKey(player.getUUID())) {
                 // 移除隐身效果
@@ -41,13 +38,7 @@ public class ChameleonEvents {
     
     private static void cleanupExpiredInvisibility() {
         long currentTime = System.currentTimeMillis();
-        Iterator<Map.Entry<java.util.UUID, Long>> iterator = ChameleonItem.INVISIBLE_PLAYERS.entrySet().iterator();
-        
-        while (iterator.hasNext()) {
-            Map.Entry<java.util.UUID, Long> entry = iterator.next();
-            if (entry.getValue() < currentTime) {
-                iterator.remove();
-            }
-        }
+
+        ChameleonItem.INVISIBLE_PLAYERS.entrySet().removeIf(entry -> entry.getValue() < currentTime);
     }
 }

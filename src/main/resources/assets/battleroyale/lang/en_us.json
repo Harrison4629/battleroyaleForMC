@@ -4,46 +4,46 @@
   "item.battleroyale.medkit": "Medkit",
   "item.battleroyale.medkit.tooltip": "Medical supplies for emergency healing",
   "item.battleroyale.medkit.tooltip.use": "Hold right-click to heal 12 health points",
-  "item.battleroyale.medkit.heal_success": "Healing complete!",
-  "item.battleroyale.medkit.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.medkit.use_success": "Healing complete!",
+  "item.battleroyale.medkit.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.bandage": "Bandage",
   "item.battleroyale.bandage.tooltip": "Bangage supplies for emergency healing",
   "item.battleroyale.bandage.tooltip.use": "Hold right-click to heal 4 health points",
-  "item.battleroyale.bandage.heal_success": "Healing complete!",
-  "item.battleroyale.bandage.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.bandage.use_success": "Healing complete!",
+  "item.battleroyale.bandage.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.regeneration_syringe": "Regeneration Syringe",
   "item.battleroyale.regeneration_syringe.tooltip": "Regeneration Syringe supplies for emergency healing",
   "item.battleroyale.regeneration_syringe.tooltip.use": "Hold right-click to get healing static",
-  "item.battleroyale.regeneration_syringe.heal_success": "Injection completed!",
-  "item.battleroyale.regeneration_syringe.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.regeneration_syringe.use_success": "Injection completed!",
+  "item.battleroyale.regeneration_syringe.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.chameleon": "Chameleon",
   "item.battleroyale.chameleon.tooltip": "It's a chameleon! Become the chameleon to gain invisibility but leave footprints! (Taking damage cancels invisibility!)",
   "item.battleroyale.chameleon.tooltip.use": "Hold right-click to be invisible",
-  "item.battleroyale.chameleon.heal_success": "You are now invisible but leaving footprints. Taking damage will cancel this effect!",
-  "item.battleroyale.chameleon.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.chameleon.use_success": "You are now invisible but leaving footprints. Taking damage will cancel this effect!",
+  "item.battleroyale.chameleon.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_1": "Basic Armor Plate",
   "item.battleroyale.armor_plate_1.tooltip": "Basic Armor Plate, offering fundamental protection",
   "item.battleroyale.armor_plate_1.tooltip.use": "Hold right-click to be invisible",
-  "item.battleroyale.armor_plate_1.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.armor_plate_1.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_2": "Improved Armor Plate",
   "item.battleroyale.armor_plate_2.tooltip": "Improved Armor Plate, an upgrade to the basic model, offering improved damage resistance and durability",
   "item.battleroyale.armor_plate_2.tooltip.use": "Hold right-click to be invisible",
-  "item.battleroyale.armor_plate_2.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.armor_plate_2.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_3": "Advanced Armor Plate",
   "item.battleroyale.armor_plate_3.tooltip": "Advanced Armor Plate, crafted from superior materials and cutting-edge technology, it offers significantly enhanced protection",
   "item.battleroyale.armor_plate_3.tooltip.use": "Hold right-click to be invisible",
-  "item.battleroyale.armor_plate_3.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.armor_plate_3.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_4": "Ultra Armor Plate",
   "item.battleroyale.armor_plate_4.tooltip": "Ultra Armor Plate, forged by master artisans, its exceptional quality delivers paramount protection",
   "item.battleroyale.armor_plate_4.tooltip.use": "Hold right-click to be invisible",
-  "item.battleroyale.armor_plate_4.heal_fail": "Right-click duration was too short!",
+  "item.battleroyale.armor_plate_4.use_fail": "Right-click duration was too short!",
 
   "entity.battleroyale.airdrop": "Airdrop"
 }
