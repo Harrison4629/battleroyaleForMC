@@ -30,5 +30,7 @@ public class ModItems {
             () -> new ArmorPlateItem3(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ARMOR_PLATE_4 = ITEMS.register("armor_plate_4",
             () -> new ArmorPlateItem4(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> PHASE_CORE = ITEMS.register("phase_core",
+            () -> new PhaseCoreItem(new Item.Properties().stacksTo(3)));
 
 }

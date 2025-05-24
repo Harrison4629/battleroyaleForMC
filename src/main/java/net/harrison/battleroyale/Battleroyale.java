@@ -81,6 +81,7 @@ public class Battleroyale {
             event.accept(ModItems.ARMOR_PLATE_2.get());
             event.accept(ModItems.ARMOR_PLATE_3.get());
             event.accept(ModItems.ARMOR_PLATE_4.get());
+            event.accept(ModItems.PHASE_CORE.get());
         }
     }
 }
