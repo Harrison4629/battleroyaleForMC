@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
@@ -79,5 +80,20 @@ public class Airdrop {
         
         // 延迟2秒后生成空投
         scheduler.schedule(() -> server.execute(() -> spawnAirdrop(server, airdropPos)), 1, TimeUnit.SECONDS);
+    }
+
+    //清除世界中所有的空投实体
+    public static void clearAllAirdrops(MinecraftServer server) {
+        if (server == null) return;
+        
+        ServerLevel level = server.getLevel(ServerLevel.OVERWORLD);
+        if (level == null) return;
+
+        // 查找并删除所有空投实体
+        for (Entity entity : level.getEntities().getAll()) {
+            if (entity instanceof AirdropEntity) {
+                entity.discard();
+            }
+        }
     }
 }

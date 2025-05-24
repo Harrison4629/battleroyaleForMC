@@ -96,15 +96,13 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
             LootTable loottable = this.level.getServer().getLootTables().get(this.lootTable);
             if (player instanceof net.minecraft.server.level.ServerPlayer) {
                 net.minecraft.world.level.storage.loot.LootContext.Builder lootcontext$builder =
-                    (new net.minecraft.world.level.storage.loot.LootContext.Builder(
-                        (net.minecraft.server.level.ServerLevel)this.level))
-                        .withParameter(LootContextParams.ORIGIN, this.position())
-                        .withOptionalRandomSeed(this.lootTableSeed);
+                        (new net.minecraft.world.level.storage.loot.LootContext.Builder(
+                                (net.minecraft.server.level.ServerLevel)this.level))
+                                .withParameter(LootContextParams.ORIGIN, this.position())
+                                .withOptionalRandomSeed(this.lootTableSeed);
 
                 // 如果玩家不为空，添加玩家作为上下文
-                if (player != null) {
-                    lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
-                }
+                lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
 
                 LootContext lootparams = lootcontext$builder.create(LootContextParamSets.CHEST);
                 loottable.fill(this, lootparams);
@@ -155,6 +153,10 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
                     // 服务器端处理落地事件，例如生成拾取物或播放音效
                     //this.level.playSound(null, this.blockPosition(), SoundEvents.WOOD_FALL, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
+                    // 空投落地后，尝试填充物品（即使没有玩家交互）
+                    if (this.lootTable != null) {
+                        this.unpackLootTable(null);
+                    }
                 }
             }
             // 落地后速度归零

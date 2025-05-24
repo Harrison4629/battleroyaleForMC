@@ -4,6 +4,7 @@ import net.harrison.battleroyale.config.ZoneConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
@@ -334,8 +335,7 @@ public class ZoneManager {
             
             // 获取当前缩圈后的安全区大小
             int currentZoneSize = ZoneConfig.getZoneSize(nextStage);
-            
-            // 延迟1秒后生成空投，让玩家有时间理解缩圈已完成
+
             safeSubmit(server, () -> {
                 // 通过Airdrop类调度空投生成
                 net.harrison.battleroyale.airdrop.Airdrop.scheduleAirdrop(
@@ -373,7 +373,7 @@ public class ZoneManager {
         }
     }
 
-    //创建一个模拟的命令源,用于递归调用startShrinking,@return 命令源对象
+    //创建一个模拟的命令源,用于递归调用startShrinking
     private static CommandSourceStack createFakeCommandSource(MinecraftServer server) {
         // 创建一个以保存的中心点为位置的命令源
         return server.createCommandSourceStack()
@@ -398,6 +398,26 @@ public class ZoneManager {
             resetScoreboardValue(source.getServer(), ScoreboardConstants.SHRINKING_ENTRY);
 
         });
+         
+         // 清除所有空投
+         safeSubmit(source.getServer(), () -> {
+             net.harrison.battleroyale.airdrop.Airdrop.clearAllAirdrops(source.getServer());
+         });
+         
+         // 将世界边界设置为最大值(59999968)，相当于无限大
+         safeSubmit(source.getServer(), () -> {
+             // 获取主世界
+             ServerLevel overworld = source.getServer().getLevel(ServerLevel.OVERWORLD);
+             if (overworld != null) {
+                 // 保持边界中心不变，只改变大小
+                 double centerX = overworld.getWorldBorder().getCenterX();
+                 double centerZ = overworld.getWorldBorder().getCenterZ();
+                 
+                 // 设置边界到最大值
+                 overworld.getWorldBorder().setCenter(centerX, centerZ);
+                 overworld.getWorldBorder().setSize(59999968);
+             }
+         });
     }
     
 

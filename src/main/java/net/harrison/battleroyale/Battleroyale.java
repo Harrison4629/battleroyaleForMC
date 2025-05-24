@@ -22,6 +22,7 @@ public class Battleroyale {
     public static final String MODID = "battleroyale";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @SuppressWarnings("removal")
     public Battleroyale() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
