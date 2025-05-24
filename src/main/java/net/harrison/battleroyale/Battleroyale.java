@@ -59,16 +59,7 @@ public class Battleroyale {
                         event.getServer().createCommandSourceStack().withSuppressedOutput(),
                         "scoreboard players set -------- zone 0"
                 );
-                event.getServer().getCommands().performPrefixedCommand(
-                        event.getServer().createCommandSourceStack().withSuppressedOutput(),
-                        "worldborder damage buffer 0"
-                );
-                event.getServer().getCommands().performPrefixedCommand(
-                        event.getServer().createCommandSourceStack().withSuppressedOutput(),
-                        "worldborder damage amount 0.1"
-                );
             }
-
         });
     }
     
