@@ -43,5 +43,7 @@
   "item.battleroyale.armor_plate_4": "Ultra Armor Plate",
   "item.battleroyale.armor_plate_4.tooltip": "Ultra Armor Plate, forged by master artisans, its exceptional quality delivers paramount protection",
   "item.battleroyale.armor_plate_4.tooltip.use": "Hold right-click to be invisible",
-  "item.battleroyale.armor_plate_4.heal_fail": "Right-click duration was too short!"
+  "item.battleroyale.armor_plate_4.heal_fail": "Right-click duration was too short!",
+
+  "entity.battleroyale.airdrop": "Airdrop"
 }

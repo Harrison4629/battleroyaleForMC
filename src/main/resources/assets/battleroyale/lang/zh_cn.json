@@ -42,5 +42,7 @@
   "item.battleroyale.armor_plate_4": "顶级护甲板",
   "item.battleroyale.armor_plate_4.tooltip": "顶级护甲板，由顶级工匠打造，品质卓越，提供顶级的保护效果",
   "item.battleroyale.armor_plate_4.tooltip.use": "按住右键以装备",
-  "item.battleroyale.armor_plate_4.heal_fail": "按住的时间太短！"
+  "item.battleroyale.armor_plate_4.heal_fail": "按住的时间太短！",
+
+  "entity.battleroyale.airdrop": "空投"
 }

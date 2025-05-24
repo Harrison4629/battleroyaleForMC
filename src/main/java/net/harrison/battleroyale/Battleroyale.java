@@ -67,6 +67,7 @@ public class Battleroyale {
                         "worldborder damage amount 0.1"
                 );
             }
+
         });
     }
     
