@@ -51,5 +51,8 @@
   "item.battleroyale.phase_core.tooltip.use": "按住右键向前短距离位移，5秒后将回到原位",
   "item.battleroyale.phase_core.use_success": "位移开始！5秒后将返回原位...",
   "item.battleroyale.phase_core.use_fail": "按住的时间太短！",
-  "item.battleroyale.phase_core.trace_back": "位移结束，已返回原位！"
+  "item.battleroyale.phase_core.trace_back": "位移结束，已返回原位！",
+
+  "key.categories.battleroyale": "大逃杀按键绑定",
+  "key.battleroyale.stop_phasing": "停止传送"
 }

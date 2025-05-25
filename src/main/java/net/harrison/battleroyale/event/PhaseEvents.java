@@ -65,9 +65,11 @@ public class PhaseEvents {
      */
     private static void teleportBack(Player player, PhaseData phaseData) {
         Vec3 originalPos = phaseData.getOriginalPosition();
+        System.out.println("Teleporting to: " + originalPos.toString() + " from: " + player.position());
 
         // 传送玩家
-        player.teleportTo(originalPos.x, originalPos.y, originalPos.z);
+
+        player.setPos(originalPos.x, originalPos.y, originalPos.z);
         player.setDeltaMovement(Vec3.ZERO); // 停止所有移动
 
         // 播放传送音效

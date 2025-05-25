@@ -82,7 +82,7 @@ public abstract class AbstractUsableItem extends Item {
                 player.getCooldowns().addCooldown(this, cooldownTicks);
             }
             
-            // 在客户端产生粒子效果,音效
+            // 在客户端产生粒子效果
             if (level.isClientSide) {
                 spawnParticles(player, level);
 
