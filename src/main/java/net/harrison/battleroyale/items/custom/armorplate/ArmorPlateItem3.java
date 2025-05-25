@@ -1,6 +1,8 @@
 package net.harrison.battleroyale.items.custom.armorplate;
 
 import net.harrison.battleroyale.items.custom.AbstractUsableItem;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,6 +22,7 @@ public class ArmorPlateItem3 extends AbstractUsableItem {
 
     @Override
     protected void applyEffect(Player player, Level level) {
+        player.removeEffect(MobEffects.ABSORPTION);
         player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, MobEffectInstance.INFINITE_DURATION, ABSORPTION_VALUE, false, false));
 
     }
@@ -52,5 +55,10 @@ public class ArmorPlateItem3 extends AbstractUsableItem {
     @Override
     protected UseAnim getItemUseAnimation() {
         return UseAnim.BRUSH;
+    }
+
+    @Override
+    protected ParticleOptions getParticleType() {
+        return ParticleTypes.ELECTRIC_SPARK;
     }
 }
