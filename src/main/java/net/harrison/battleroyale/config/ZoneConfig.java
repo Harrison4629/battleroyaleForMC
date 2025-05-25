@@ -6,16 +6,16 @@ package net.harrison.battleroyale.config;
  */
 public class ZoneConfig {
     // 圈大小设置（从大到小）
-    public static final int ZONE_SIZE_1 = 300; // 第一圈大小
-    public static final int ZONE_SIZE_2 = 200; // 第二圈大小
-    public static final int ZONE_SIZE_3 = 120; // 第三圈大小
-    public static final int ZONE_SIZE_4 = 60;  // 第四圈大小
+    public static final int ZONE_SIZE_1 = 600; // 第一圈大小
+    public static final int ZONE_SIZE_2 = 300; // 第二圈大小
+    public static final int ZONE_SIZE_3 = 150; // 第三圈大小
+    public static final int ZONE_SIZE_4 = 70;  // 第四圈大小
     public static final int ZONE_SIZE_5 = 30;  // 第五圈大小
     public static final int ZONE_SIZE_6 = 5;  // 第六圈大小（最终圈）
     
     // 各阶段倒计时时间（秒）
-    public static final int ZONE_WARNING_TIME_1 = 60; // 第一阶段警告时间
-    public static final int ZONE_WARNING_TIME_2 = 50; // 第二阶段警告时间
+    public static final int ZONE_WARNING_TIME_1 = 50; // 第一阶段警告时间
+    public static final int ZONE_WARNING_TIME_2 = 40; // 第二阶段警告时间
     public static final int ZONE_WARNING_TIME_3 = 40; // 第三阶段警告时间
     public static final int ZONE_WARNING_TIME_4 = 30;  // 第四阶段警告时间
     public static final int ZONE_WARNING_TIME_5 = 20;  // 第五阶段警告时间

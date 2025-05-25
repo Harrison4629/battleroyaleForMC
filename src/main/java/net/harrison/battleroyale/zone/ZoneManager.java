@@ -1,5 +1,6 @@
 package net.harrison.battleroyale.zone;
 
+import net.harrison.battleroyale.airdrop.Airdrop;
 import net.harrison.battleroyale.config.ZoneConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -335,11 +336,25 @@ public class ZoneManager {
             // 获取当前缩圈后的安全区大小
             int currentZoneSize = ZoneConfig.getZoneSize(nextStage);
 
-            safeSubmit(server, () -> {
-                // 通过Airdrop类调度空投生成
-                net.harrison.battleroyale.airdrop.Airdrop.scheduleAirdrop(
-                    server, scheduler, zoneCenterX, zoneCenterZ, currentZoneSize);
-            });
+            //最后两圈不刷空投，不然太拥挤
+            if(finalStage - nextStage > 2) {
+
+                //随机刷1~2个空投
+                int airdropValue = random.nextInt(10);
+                int numOfAirdrop;
+                if(airdropValue < 7) {
+                    numOfAirdrop = 1;
+                } else {
+                    numOfAirdrop = 2;
+                }
+                for(int i = 0; i < numOfAirdrop; i++) {
+                    safeSubmit(server, () -> {
+                        // 通过Airdrop类调度空投生成
+                        Airdrop.scheduleAirdrop(
+                                server, scheduler, zoneCenterX, zoneCenterZ, currentZoneSize);
+                    });
+                }
+            }
 
             // 创建延迟任务
             ScheduledFuture<?> task = scheduler.schedule(() -> {
