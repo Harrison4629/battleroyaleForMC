@@ -396,12 +396,8 @@ public class ZoneManager {
             resetScoreboardValue(source.getServer(), ScoreboardConstants.SHRINKING_ENTRY);
 
         });
-         
-         // 清除所有空投
-         safeSubmit(source.getServer(), () -> {
-             net.harrison.battleroyale.airdrop.Airdrop.clearAllAirdrops(source.getServer());
-         });
-         
+
+
          // 将世界边界设置为最大值(59999968)，相当于无限大
          safeSubmit(source.getServer(), () -> {
              // 获取主世界

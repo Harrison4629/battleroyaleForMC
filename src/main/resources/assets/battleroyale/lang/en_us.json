@@ -48,9 +48,9 @@
   "entity.battleroyale.airdrop": "Airdrop",
 
   "item.battleroyale.phase_core": "Phase Core",
-  "item.battleroyale.phase_core.tooltip": "A magical core containing spatio-temporal power, allowing for brief spatial travel.",
-  "item.battleroyale.phase_core.tooltip.use": "Hold right-click to teleport a short distance forward, returning to your original position after 5 seconds.",
-  "item.battleroyale.phase_core.use_success": "Teleportation initiated! Returning to original position in 5 seconds...",
+  "item.battleroyale.phase_core.tooltip": "A magical core containing spatio-temporal power, allowing for brief spatial travel",
+  "item.battleroyale.phase_core.tooltip.use": "Hold right-click to phase forward, press R to return or you'll be forced back after 5 seconds",
+  "item.battleroyale.phase_core.use_success": "Phase started! Press R to return to the original position, or you'll be forced back after 5 seconds...",
   "item.battleroyale.phase_core.use_fail": "Hold too short!",
   "item.battleroyale.phase_core.trace_back": "Teleportation ended, returned to original position!",
 

@@ -48,8 +48,8 @@
 
   "item.battleroyale.phase_core": "位移魔核",
   "item.battleroyale.phase_core.tooltip": "包含时空力量的魔法核心，可以短暂穿越空间",
-  "item.battleroyale.phase_core.tooltip.use": "按住右键向前短距离位移，5秒后将回到原位",
-  "item.battleroyale.phase_core.use_success": "位移开始！5秒后将返回原位...",
+  "item.battleroyale.phase_core.tooltip.use": "按住右键向前位移，按下R返回或5秒后强制返回",
+  "item.battleroyale.phase_core.use_success": "位移开始！按下R返回原位或5秒后强迫返回原位...",
   "item.battleroyale.phase_core.use_fail": "按住的时间太短！",
   "item.battleroyale.phase_core.trace_back": "位移结束，已返回原位！",
 

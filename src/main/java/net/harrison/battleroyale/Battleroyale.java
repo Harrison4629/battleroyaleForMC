@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.harrison.battleroyale.command.ModCommands;
 import net.harrison.battleroyale.items.ModCreativeModeTab;
 import net.harrison.battleroyale.items.ModItems;
+import net.harrison.battleroyale.networking.ModMessages;
 import net.harrison.battleroyale.zone.ZoneManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
@@ -30,6 +31,9 @@ public class Battleroyale {
         ModEntities.register(modEventBus);
 
 
+
+// 注册网络消息
+ModMessages.register();
 
         modEventBus.addListener(this::addCreative);
 

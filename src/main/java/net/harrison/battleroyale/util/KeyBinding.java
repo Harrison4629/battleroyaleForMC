@@ -11,6 +11,6 @@ public class KeyBinding {
 
 
     public static final KeyMapping STOP_PHASING_KEY = new KeyMapping(KEY_BIND_STOP_PHASING, KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, KEY_CATEGORY);
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, KEY_CATEGORY);
 
 }

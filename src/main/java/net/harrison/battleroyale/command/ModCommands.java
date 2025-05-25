@@ -2,6 +2,7 @@ package net.harrison.battleroyale.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import net.harrison.battleroyale.airdrop.Airdrop;
 import net.harrison.battleroyale.zone.ZoneManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -35,16 +36,18 @@ public class ModCommands {
             .then(Commands.literal("stop")
                 .executes(context -> {
                     ZoneManager.stopShrinking(context.getSource());
+                    Airdrop.clearAllAirdrops(context.getSource().getServer());
                     return 1;
                 })
             )
             .then(Commands.literal("help")
                 .executes(context -> {
-                    context.getSource().sendSuccess(Component.literal("§6大逃杀缩圈系统帮助：\n" +
-                            "§e/brzone start <阶段> §7- 开始指定阶段的缩圈 (1-5)\n" +
-                            "§e/brzone stop §7- 停止当前缩圈进程\n" +
-                            "§e/brzone vanilla §7- 使用原版数据包缩圈功能\n" +
-                            "§e/brzone info §7- 显示当前缩圈系统状态"), true);
+                    context.getSource().sendSuccess(Component.literal("""
+                            §6大逃杀缩圈系统帮助：
+                            §e/brzone start <阶段> §7- 开始指定阶段的缩圈 (1-5)
+                            §e/brzone stop §7- 停止当前缩圈进程
+                            §e/brzone vanilla §7- 使用原版数据包缩圈功能
+                            §e/brzone info §7- 显示当前缩圈系统状态"""), true);
                     return 1;
                 })
             )

@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class RegenerationSyringeItem extends AbstractUsableItem {
     private static final int USE_DURATION = 100; // 使用时间5秒
-    private static final int REGEN_DURATION = 800; // 持续40秒
+    private static final int REGEN_DURATION = 400; // 持续20秒
     private static final int COOLDOWN_TICKS = 200; // 10秒冷却
 
     public RegenerationSyringeItem(Properties properties) {
