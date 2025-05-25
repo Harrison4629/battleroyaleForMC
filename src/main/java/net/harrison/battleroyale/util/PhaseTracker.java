@@ -65,12 +65,5 @@ public class PhaseTracker {
         return PHASING_PLAYERS.containsKey(playerId);
     }
     
-    /**
-     * 清理所有过期的位移数据
-     * @param currentTime 当前时间
-     */
-    public static void cleanupExpiredPhasing(int currentTime) {
-        PHASING_PLAYERS.entrySet().removeIf(entry -> 
-                entry.getValue().isFinished(currentTime));
-    }
+
 }

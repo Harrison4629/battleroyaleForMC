@@ -36,50 +36,45 @@ public class PhaseEvents {
                 } else {
                     // 平滑移动玩家
                     movePlayer(player, phaseData);
-                    
+
                     // 粒子效果
                     if (player.level.isClientSide && player.tickCount % 2 == 0) {
                         spawnPhaseParticles(player);
                     }
                 }
             }
-            
-            // 每10秒清理过期位移数据
-            if (player.tickCount % 200 == 0 && !player.level.isClientSide) {
-                PhaseTracker.cleanupExpiredPhasing(player.tickCount);
-            }
         }
     }
-    
+
     /**
      * 平滑移动玩家
      */
     private static void movePlayer(Player player, PhaseData phaseData) {
         Vec3 direction = phaseData.getDirection();
         float speed = phaseData.getMoveSpeed();
-        
+
         // 计算移动向量
         Vec3 movement = direction.multiply(speed, speed, speed);
-        
+
         // 移动玩家
         player.setDeltaMovement(movement);
     }
-    
+
     /**
      * 传送玩家回原位
      */
     private static void teleportBack(Player player, PhaseData phaseData) {
         Vec3 originalPos = phaseData.getOriginalPosition();
-        
+
         // 传送玩家
         player.teleportTo(originalPos.x, originalPos.y, originalPos.z);
         player.setDeltaMovement(Vec3.ZERO); // 停止所有移动
-        
+
         // 播放传送音效
         if (!player.level.isClientSide) {
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            
+
             // 显示提示信息
             player.displayClientMessage(
                     net.minecraft.network.chat.Component.translatable("item.battleroyale.phase_core.trace_back"),
