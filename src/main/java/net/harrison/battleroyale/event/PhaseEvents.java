@@ -4,8 +4,11 @@ import net.harrison.battleroyale.Battleroyale;
 import net.harrison.battleroyale.util.PhaseData;
 import net.harrison.battleroyale.util.PhaseTracker;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -68,18 +71,18 @@ public class PhaseEvents {
         System.out.println("Teleporting to: " + originalPos.toString() + " from: " + player.position());
 
         // 传送玩家
-
-        player.setPos(originalPos.x, originalPos.y, originalPos.z);
-        player.setDeltaMovement(Vec3.ZERO); // 停止所有移动
+        player.setPos(originalPos.x, originalPos.y+1, originalPos.z);
 
         // 播放传送音效
         if (!player.level.isClientSide) {
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
+            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 40, 0, false, false));
+
             // 显示提示信息
             player.displayClientMessage(
-                    net.minecraft.network.chat.Component.translatable("item.battleroyale.phase_core.trace_back"),
+                    Component.translatable("item.battleroyale.phase_core.trace_back"),
                     true);
         }
         

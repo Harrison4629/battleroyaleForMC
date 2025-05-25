@@ -14,7 +14,7 @@ public class ChameleonEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !event.player.level.isClientSide()) {
+        if (event.phase == TickEvent.Phase.END && !event.player.level.isClientSide) {
             // 定期清理过期的隐身记录
             if (event.player.tickCount % 200 == 0) { // 每10秒左右清理一次
                 cleanupExpiredInvisibility();
