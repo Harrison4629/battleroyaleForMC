@@ -1,6 +1,7 @@
 package net.harrison.battleroyale.event;
 
 import net.harrison.battleroyale.Battleroyale;
+import net.harrison.battleroyale.networking.ModMessages;
 import net.harrison.battleroyale.networking.packet.StopPhasingPacket;
 import net.harrison.battleroyale.util.KeyBinding;
 import net.harrison.battleroyale.util.PhaseData;
@@ -78,7 +79,7 @@ public class KeyEvents {
                     // 如果玩家正在位移，发送网络包到服务器
                     if (PhaseTracker.isPhasing(playerId)) {
                         // 发送网络数据包到服务器
-                        net.harrison.battleroyale.networking.ModMessages.sendToServer(new StopPhasingPacket());
+                        ModMessages.sendToServer(new StopPhasingPacket());
                         
                         // 客户端显示粒子效果
                         if (player.level.isClientSide) {

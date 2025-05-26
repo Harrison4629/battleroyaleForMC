@@ -82,10 +82,14 @@ public class PhaseTracker {
         
         // 检查位移是否已结束
         if (phaseData.isFinished(player.tickCount)) {
-            // 位移结束，返回原始位置
+
             Vec3 originalPos = phaseData.getOriginalPosition();
-            player.teleportTo(originalPos.x, originalPos.y + 1, originalPos.z);
+
+            // 位移结束，返回原始位置
+            player.setPos(originalPos.x, originalPos.y+1, originalPos.z);
+
             stopPhasing(playerId);
+
             return;
         }
         
@@ -94,11 +98,14 @@ public class PhaseTracker {
         float speed = phaseData.getMoveSpeed();
         
         Vec3 movement = direction.scale(speed);
-        player.teleportTo(
-            player.getX() + movement.x,
-            player.getY() + movement.y,
-            player.getZ() + movement.z
-        );
+
+        //player.setDeltaMovement(movement);
+        player.teleportTo( player.getX() + movement.x, player.getY() + movement.y, player.getZ() + movement.z );
+        //player.teleportTo(
+        //    player.getX() + movement.x,
+        //    player.getY() + movement.y,
+        //    player.getZ() + movement.z
+        //);
     }
 
     /**
