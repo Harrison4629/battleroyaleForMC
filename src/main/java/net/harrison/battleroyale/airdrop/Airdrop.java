@@ -53,7 +53,7 @@ public class Airdrop {
         airdrop.setPos(x, 50, z); // 从高空掉落
 
         // 设置空投的战利品表
-        ResourceLocation lootTableId = new ResourceLocation("battleroyale", "airdrop");
+        ResourceLocation lootTableId = ResourceLocation.fromNamespaceAndPath("battleroyale", "airdrop");
         airdrop.setLootTable(lootTableId, level.random.nextLong());
 
         // 将实体添加到世界

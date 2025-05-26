@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class AirdropRenderer extends EntityRenderer<AirdropEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Battleroyale.MODID, "textures/entity/airdrop.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Battleroyale.MODID, "textures/entity/airdrop.png");
     private final AirdropModel<AirdropEntity> model;
 
     public AirdropRenderer(EntityRendererProvider.Context context) {
