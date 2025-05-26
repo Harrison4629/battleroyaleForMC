@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.util;
+package net.harrison.battleroyale.event;
 
 import net.harrison.battleroyale.Battleroyale;
 import net.harrison.battleroyale.client.sound.UsingSoundManager;

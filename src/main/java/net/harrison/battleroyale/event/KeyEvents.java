@@ -27,7 +27,6 @@ public class KeyEvents {
      */
     private static void teleportBack(Player player, PhaseData phaseData) {
         Vec3 originalPos = phaseData.getOriginalPosition();
-        System.out.println("Teleporting to: " + originalPos.toString() + " from: " + player.position());
 
         // 传送玩家
         player.setPos(originalPos.x, originalPos.y+1, originalPos.z);

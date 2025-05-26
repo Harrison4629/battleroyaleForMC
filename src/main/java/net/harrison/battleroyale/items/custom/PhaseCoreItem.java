@@ -4,6 +4,7 @@ import net.harrison.battleroyale.util.PhaseTracker;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +31,11 @@ public class PhaseCoreItem extends AbstractUsableItem{
             player.displayClientMessage(
                     Component.translatable("item.battleroyale.phase_core.use_success"),
                     true);
+            
+            // 立即执行一次位移更新，确保效果立即生效
+            if (player instanceof ServerPlayer serverPlayer) {
+                PhaseTracker.updatePhasing(serverPlayer);
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package net.harrison.battleroyale.util;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -65,5 +67,55 @@ public class PhaseTracker {
         return PHASING_PLAYERS.containsKey(playerId);
     }
     
+    /**
+     * 更新玩家位移 - 在服务端执行，应用位移效果
+     * @param player 需要更新的玩家
+     */
+    public static void updatePhasing(ServerPlayer player) {
+        if (player == null) return;
+        
+        UUID playerId = player.getUUID();
+        if (!isPhasing(playerId)) return;
+        
+        PhaseData phaseData = getPhaseData(playerId);
+        if (phaseData == null) return;
+        
+        // 检查位移是否已结束
+        if (phaseData.isFinished(player.tickCount)) {
+            // 位移结束，返回原始位置
+            Vec3 originalPos = phaseData.getOriginalPosition();
+            player.teleportTo(originalPos.x, originalPos.y + 1, originalPos.z);
+            stopPhasing(playerId);
+            return;
+        }
+        
+        // 按照方向和速度移动玩家
+        Vec3 direction = phaseData.getDirection();
+        float speed = phaseData.getMoveSpeed();
+        
+        Vec3 movement = direction.scale(speed);
+        player.teleportTo(
+            player.getX() + movement.x,
+            player.getY() + movement.y,
+            player.getZ() + movement.z
+        );
+    }
 
+    /**
+     * 批量更新所有正在位移的玩家 - 服务端调用
+     * @param level 服务器世界
+     */
+    public static void updateAllPhasingPlayers(ServerLevel level) {
+        if (level == null || PHASING_PLAYERS.isEmpty()) return;
+        
+        // 创建一个副本以避免并发修改问题
+        Map<UUID, PhaseData> phasingPlayersCopy = new HashMap<>(PHASING_PLAYERS);
+        
+        for (UUID playerId : phasingPlayersCopy.keySet()) {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayer(playerId);
+            if (player != null && player.level == level) {
+                updatePhasing(player);
+            }
+        }
+    }
 }

@@ -23,7 +23,7 @@ public class Battleroyale {
     public static final String MODID = "battleroyale";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @SuppressWarnings("removal")
+
     public Battleroyale() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -32,8 +32,8 @@ public class Battleroyale {
 
 
 
-// 注册网络消息
-ModMessages.register();
+
+        ModMessages.register();
 
         modEventBus.addListener(this::addCreative);
 

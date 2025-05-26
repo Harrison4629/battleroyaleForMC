@@ -33,7 +33,6 @@ public class PhaseData {
         return moveSpeed;
     }
 
-    //判断位移是否已经结束
     public boolean isFinished(int currentTime) {
         return currentTime >= (startTime + duration);
     }
