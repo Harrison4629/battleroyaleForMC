@@ -1,5 +1,6 @@
 package net.harrison.battleroyale.util;
 
+import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -46,15 +47,17 @@ public class PhaseTracker {
         PhaseData phaseData = getPhaseData(playerId);
         if (phaseData == null) return;
         
-        // 检查位移是否已结束
-        if (phaseData.isFinished(player.tickCount)) {
-
+        // 检查位移是否已结束或按下按键
+        if (phaseData.isFinished(player.tickCount) || StopPhasingC2SPacket.isKeyPressed(playerId)) {
+    
             Vec3 originalPos = phaseData.getOriginalPosition();
-
+    
             // 位移结束，返回原始位置
             player.moveTo(originalPos.x, originalPos.y, originalPos.z);
-
+    
             stopPhasing(playerId);
+            // 重置按键状态
+            StopPhasingC2SPacket.resetKeyPressed(playerId);
 
         } else {
 
