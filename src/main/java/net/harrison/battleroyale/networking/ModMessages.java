@@ -1,7 +1,7 @@
 package net.harrison.battleroyale.networking;
 
 import net.harrison.battleroyale.Battleroyale;
-import net.harrison.battleroyale.networking.packet.StopPhasingPacket;
+import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -24,14 +24,13 @@ public class ModMessages {
                 .clientAcceptedVersions(s -> true)
                 .serverAcceptedVersions(s -> true)
                 .simpleChannel();
-        
+
+
         INSTANCE = net;
-        
-        // 注册数据包
-        net.messageBuilder(StopPhasingPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(StopPhasingPacket::decode)
-                .encoder(StopPhasingPacket::encode)
-                .consumerMainThread(StopPhasingPacket::handle)
+        net.messageBuilder(StopPhasingC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(StopPhasingC2SPacket::new)
+                .encoder(StopPhasingC2SPacket::toBytes)
+                .consumerMainThread(StopPhasingC2SPacket::handle)
                 .add();
     }
     

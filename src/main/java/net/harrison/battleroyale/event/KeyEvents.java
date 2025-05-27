@@ -2,7 +2,7 @@ package net.harrison.battleroyale.event;
 
 import net.harrison.battleroyale.Battleroyale;
 import net.harrison.battleroyale.networking.ModMessages;
-import net.harrison.battleroyale.networking.packet.StopPhasingPacket;
+import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
 import net.harrison.battleroyale.util.KeyBinding;
 import net.harrison.battleroyale.util.PhaseData;
 import net.harrison.battleroyale.util.PhaseTracker;
@@ -70,30 +70,10 @@ public class KeyEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if(KeyBinding.STOP_PHASING_KEY.consumeClick()) {
-                // 获取客户端玩家
-                net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
-                Player player = minecraft.player;
-                
-                if (player != null) {
-                    UUID playerId = player.getUUID();
-                    // 如果玩家正在位移，发送网络包到服务器
-                    if (PhaseTracker.isPhasing(playerId)) {
-                        // 发送网络数据包到服务器
-                        ModMessages.sendToServer(new StopPhasingPacket());
-                        
-                        // 客户端显示粒子效果
-                        if (player.level.isClientSide) {
-                            for (int i = 0; i < 32; i++) {
-                                player.level.addParticle(
-                                        ParticleTypes.PORTAL,
-                                        player.getX() + (player.level.random.nextDouble() - 0.5) * 2,
-                                        player.getY() + player.level.random.nextDouble() * 2,
-                                        player.getZ() + (player.level.random.nextDouble() - 0.5) * 2,
-                                        0, 0.1, 0);
-                            }
-                        }
-                    }
-                }
+
+
+                ModMessages.sendToServer(new StopPhasingC2SPacket());
+
             }
         }
     }

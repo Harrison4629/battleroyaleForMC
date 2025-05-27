@@ -14,6 +14,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import net.harrison.battleroyale.entities.ModEntities;
@@ -33,13 +34,23 @@ public class Battleroyale {
 
 
 
-        ModMessages.register();
+
+
+
+
+        modEventBus.addListener(this::commonSetup);
 
         modEventBus.addListener(this::addCreative);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+
+        event.enqueueWork(ModMessages::register);
+
+    }
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
         ModCommands.register(event.getDispatcher());

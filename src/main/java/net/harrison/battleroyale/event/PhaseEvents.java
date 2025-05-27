@@ -12,23 +12,6 @@ import net.minecraftforge.fml.common.Mod;
 public class PhaseEvents {
 
 
-
-    /**
-     * 平滑移动玩家
-     */
-    private static void movePlayer(Player player, PhaseData phaseData) {
-        Vec3 direction = phaseData.getDirection();
-        float speed = phaseData.getMoveSpeed();
-
-        // 计算移动向量
-        Vec3 movement = direction.multiply(speed, speed, speed);
-
-        // 移动玩家
-        player.setDeltaMovement(movement);
-    }
-
-
-    
     /**
      * 生成位移时的粒子效果
      */
