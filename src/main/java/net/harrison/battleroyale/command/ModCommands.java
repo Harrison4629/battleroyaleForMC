@@ -10,13 +10,6 @@ import net.minecraft.network.chat.Component;
 
 public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        // 基础设置命令
-        dispatcher.register(Commands.literal("brsettings").executes( (context) -> {
-                    context.getSource().sendSuccess(Component.literal("§6大逃杀模组设置菜单"), true);
-                    return 1;
-                }
-        ));
-
         // 缩圈系统命令
         dispatcher.register(Commands.literal("brzone")
             .requires(source -> source.hasPermission(2)) // 需要权限等级2
