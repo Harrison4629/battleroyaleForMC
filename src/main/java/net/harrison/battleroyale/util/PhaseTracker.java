@@ -1,10 +1,13 @@
 package net.harrison.battleroyale.util;
 
 import net.harrison.battleroyale.networking.ModMessages;
+import net.harrison.battleroyale.networking.packet.PhasingDurationS2CPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingS2CPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -54,11 +57,17 @@ public class PhaseTracker {
     
             Vec3 originalPos = phaseData.getOriginalPosition();
     
+
+            ModMessages.sendToPlayer(new StopPhasingS2CPacket(), player);
+
             // 位移结束，返回原始位置
             player.moveTo(originalPos.x, originalPos.y, originalPos.z);
 
             ModMessages.sendToPlayer(new StopPhasingS2CPacket(), player);
-    
+
+            player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
+
             stopPhasing(playerId);
             // 重置按键状态
             StopPhasingC2SPacket.resetKeyPressed(playerId);
@@ -68,6 +77,8 @@ public class PhaseTracker {
             // 按照方向和速度移动玩家
             Vec3 direction = phaseData.getDirection();
             float speed = phaseData.getMoveSpeed();
+
+            ModMessages.sendToPlayer(new PhasingDurationS2CPacket(), player);
 
             Vec3 movement = direction.scale(speed);
 

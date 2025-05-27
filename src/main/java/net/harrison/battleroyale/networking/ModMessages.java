@@ -39,6 +39,11 @@ public class ModMessages {
                 .encoder(StopPhasingS2CPacket::toBytes)
                 .consumerMainThread(StopPhasingS2CPacket::handle)
                 .add();
+        net.messageBuilder(PhasingDurationS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PhasingDurationS2CPacket::new)
+                .encoder(PhasingDurationS2CPacket::toBytes)
+                .consumerMainThread(PhasingDurationS2CPacket::handle)
+                .add();
     }
     
     public static <MSG> void sendToServer(MSG message) {

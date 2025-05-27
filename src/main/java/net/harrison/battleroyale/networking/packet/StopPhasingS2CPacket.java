@@ -1,20 +1,17 @@
 package net.harrison.battleroyale.networking.packet;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class StopPhasingS2CPacket {
-
-    private static final Map<UUID, Boolean> TP_BACK = new HashMap<>();
 
     public StopPhasingS2CPacket() {
     }
@@ -44,24 +41,24 @@ public class StopPhasingS2CPacket {
         public static void handlePacket() {
             // 这个方法在客户端上调用
             // 在客户端上导入和使用Minecraft类
-            net.minecraftforge.fml.DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> // 这里的代码只会在编译到客户端时被包含
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () ->
                     ClientHandler::createParticles);
         }
         
         /**
          * 这个方法将被移动到单独的客户端处理类中
          */
-        @OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         private static void createParticles() {
             // 从Minecraft获取客户端玩家
-            net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
-            net.minecraft.world.entity.player.Player player = minecraft.player;
+            Minecraft minecraft = Minecraft.getInstance();
+            Player player = minecraft.player;
             
             if (player != null) {
                 // 在客户端生成粒子效果
                 for (int i = 0; i < 32; i++) {
                     player.level.addParticle(
-                            net.minecraft.core.particles.ParticleTypes.PORTAL,
+                            ParticleTypes.PORTAL,
                             player.getX() + (player.level.random.nextDouble() - 0.5) * 2,
                             player.getY() + player.level.random.nextDouble() * 2,
                             player.getZ() + (player.level.random.nextDouble() - 0.5) * 2,
