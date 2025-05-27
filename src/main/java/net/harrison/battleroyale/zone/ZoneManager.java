@@ -41,6 +41,7 @@ public class ZoneManager {
     private static ScheduledExecutorService scheduler = null;
     private static boolean isRunning = false;
     private static double zoneCenterX = 0;
+    private static double zoneCenterY = 0;
     private static double zoneCenterZ = 0;
 
     //任务管理器内部类,负责管理和追踪所有调度任务
@@ -188,6 +189,7 @@ public class ZoneManager {
     
         // 保存中心点坐标用于后续阶段
         zoneCenterX = center.x;
+        zoneCenterY = center.y;
         zoneCenterZ = center.z;
     
         // 获取当前圈的参数
@@ -350,7 +352,7 @@ public class ZoneManager {
                     safeSubmit(server, () -> {
                         // 通过Airdrop类调度空投生成
                         Airdrop.scheduleAirdrop(
-                                server, scheduler, zoneCenterX, zoneCenterZ, currentZoneSize);
+                                server, scheduler, zoneCenterX, zoneCenterY, zoneCenterZ, currentZoneSize);
                     });
                 }
             }

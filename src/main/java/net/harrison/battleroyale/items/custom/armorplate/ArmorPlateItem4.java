@@ -29,7 +29,7 @@ public class ArmorPlateItem4 extends AbstractUsableItem {
 
     @Override
     protected String getFailTranslationKey() {
-        return "item.battleroyale.armor_plate_4.ues_fail";
+        return "item.battleroyale.armor_plate_4.use_fail";
     }
 
     @Override

@@ -22,7 +22,7 @@ public class Airdrop {
     private static final Random random = new Random();
 
     //在安全区内生成随机坐标
-    public static Vec3 generateRandomPosition(double centerX, double centerZ, int zoneSize) {
+    public static Vec3 generateRandomPosition(double centerX, double centerY, double centerZ, int zoneSize) {
         // 计算最大偏移量（半径）
         double maxOffset = zoneSize / 2.0 * 0.8; // 使用80%的区域避免靠近边缘
 
@@ -34,7 +34,7 @@ public class Airdrop {
         double posX = centerX + offsetX;
         double posZ = centerZ + offsetZ;
 
-        return new Vec3(posX, 0, posZ);
+        return new Vec3(posX, centerY, posZ);
     }
 
     //在指定位置生成空投
@@ -46,18 +46,18 @@ public class Airdrop {
 
         // 获取位置的整数坐标
         int x = (int) Math.round(position.x);
+        int y = (int) Math.round(position.y);
         int z = (int) Math.round(position.z);
 
         // 在空投位置上方生成空投实体
         AirdropEntity airdrop = new AirdropEntity(ModEntities.AIRDROP.get(), level);
-        airdrop.setPos(x, 50, z); // 从高空掉落
+        airdrop.setPos(x, y+50, z); // 从高空掉落
 
         // 设置空投的战利品表
-        ResourceLocation lootTableId = ResourceLocation.fromNamespaceAndPath("battleroyale", "airdrop");
+        ResourceLocation lootTableId = new ResourceLocation("battleroyale", "airdrop");
         airdrop.setLootTable(lootTableId, level.random.nextLong());
 
         // 将实体添加到世界
-        level.addFreshEntity(airdrop);
             
         // 在聊天中广播空投位置
         server.getPlayerList().broadcastSystemMessage(
@@ -68,9 +68,9 @@ public class Airdrop {
     
     //在当前阶段结束后调度空投生成
     public static void scheduleAirdrop(MinecraftServer server, ScheduledExecutorService scheduler, 
-                                      double centerX, double centerZ, int zoneSize) {
+                                      double centerX, double centerY, double centerZ, int zoneSize) {
         // 获取随机位置
-        Vec3 airdropPos = generateRandomPosition(centerX, centerZ, zoneSize);
+        Vec3 airdropPos = generateRandomPosition(centerX, centerY , centerZ, zoneSize);
         
         // 发送预告
         server.getPlayerList().broadcastSystemMessage(

@@ -10,6 +10,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -70,7 +72,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
             // 确保在玩家打开箱子前已经填充了物品
             this.unpackLootTable(player);
 
-            NetworkHooks.openScreen((net.minecraft.server.level.ServerPlayer) player,this,
+            NetworkHooks.openScreen((ServerPlayer) player,this,
                     buf -> buf.writeInt(this.getId()));
 
 
@@ -91,20 +93,19 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     /**
      * 解析战利品表并填充物品
      */
-    public void unpackLootTable(@Nullable Player player) {
+    public void unpackLootTable(Player player) {
         if (this.lootTable != null && this.level.getServer() != null) {
             LootTable loottable = this.level.getServer().getLootTables().get(this.lootTable);
-            if (player instanceof net.minecraft.server.level.ServerPlayer) {
-                net.minecraft.world.level.storage.loot.LootContext.Builder lootcontext$builder =
-                        (new net.minecraft.world.level.storage.loot.LootContext.Builder(
-                                (net.minecraft.server.level.ServerLevel)this.level))
+            if (player instanceof ServerPlayer) {
+                LootContext.Builder lootcontext_builder =
+                        (new LootContext.Builder((ServerLevel)this.level))
                                 .withParameter(LootContextParams.ORIGIN, this.position())
                                 .withOptionalRandomSeed(this.lootTableSeed);
 
                 // 如果玩家不为空，添加玩家作为上下文
-                lootcontext$builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
+                lootcontext_builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
 
-                LootContext lootparams = lootcontext$builder.create(LootContextParamSets.CHEST);
+                LootContext lootparams = lootcontext_builder.create(LootContextParamSets.CHEST);
                 loottable.fill(this, lootparams);
             }
 
