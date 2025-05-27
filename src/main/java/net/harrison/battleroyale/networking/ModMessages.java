@@ -1,7 +1,9 @@
 package net.harrison.battleroyale.networking;
 
 import net.harrison.battleroyale.Battleroyale;
+import net.harrison.battleroyale.networking.packet.PhasingDurationS2CPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
+import net.harrison.battleroyale.networking.packet.StopPhasingS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -31,6 +33,11 @@ public class ModMessages {
                 .decoder(StopPhasingC2SPacket::new)
                 .encoder(StopPhasingC2SPacket::toBytes)
                 .consumerMainThread(StopPhasingC2SPacket::handle)
+                .add();
+        net.messageBuilder(StopPhasingS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(StopPhasingS2CPacket::new)
+                .encoder(StopPhasingS2CPacket::toBytes)
+                .consumerMainThread(StopPhasingS2CPacket::handle)
                 .add();
     }
     

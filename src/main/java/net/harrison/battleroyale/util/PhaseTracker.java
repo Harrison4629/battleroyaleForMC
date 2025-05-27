@@ -1,6 +1,8 @@
 package net.harrison.battleroyale.util;
 
+import net.harrison.battleroyale.networking.ModMessages;
 import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
+import net.harrison.battleroyale.networking.packet.StopPhasingS2CPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +56,8 @@ public class PhaseTracker {
     
             // 位移结束，返回原始位置
             player.moveTo(originalPos.x, originalPos.y, originalPos.z);
+
+            ModMessages.sendToPlayer(new StopPhasingS2CPacket(), player);
     
             stopPhasing(playerId);
             // 重置按键状态

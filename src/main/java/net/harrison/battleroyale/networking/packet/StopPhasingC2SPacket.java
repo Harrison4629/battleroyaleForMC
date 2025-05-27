@@ -44,16 +44,7 @@ public class StopPhasingC2SPacket {
     public static boolean isKeyPressed(UUID playerId) {
         return KEY_PRESSED_MAP.getOrDefault(playerId, false);
     }
-    
-    /**
-     * 设置玩家按键状态
-     * @param playerId 玩家UUID
-     * @param pressed 按键状态
-     */
-    public static void setKeyPressed(UUID playerId, boolean pressed) {
-        KEY_PRESSED_MAP.put(playerId, pressed);
-    }
-    
+
     /**
      * 重置玩家的按键状态
      * @param playerId 玩家UUID
@@ -70,7 +61,7 @@ public class StopPhasingC2SPacket {
             if (player != null) {
                 UUID playerId = player.getUUID();
                 if (PhaseTracker.isPhasing(playerId)) {
-                    setKeyPressed(playerId, true);
+                    KEY_PRESSED_MAP.put(playerId, true);
                 } else {
                     resetKeyPressed(playerId);
                 }

@@ -129,7 +129,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         Vec3 motion = this.getDeltaMovement();
 
         // 如果不在地面上，并且还没有达到终端速度，就继续下落
-        if (!this.onGround) { // 检查是否在地面上，注意这里是 `this.onGround()` 而不是 `this.onGround`
+        if (!this.onGround) {
             // 如果之前是落地状态，现在又不在地面上了，说明失去了支撑，重新开始下落
             if (hasLanded()) {
                 setHasLanded(false); // 重置落地状态
