@@ -92,7 +92,6 @@ dependencies {
     implementation fg.deobf("curse.maven:mrcrayfishs-gun-mod-289479:4718584")
     implementation fg.deobf('curse.maven:framework-549225:5692396')
 
-    //implementation 'com.google.guava:guava:31.1-jre'
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
