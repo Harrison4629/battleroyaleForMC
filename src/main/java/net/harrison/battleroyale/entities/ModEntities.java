@@ -22,7 +22,7 @@ public class ModEntities {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Battleroyale.MODID);
 
     public static final RegistryObject<EntityType<AirdropEntity>> AIRDROP = ENTITY_TYPES.register("airdrop",
-            () -> EntityType.Builder.<AirdropEntity>of(AirdropEntity::new, MobCategory.MISC)
+            () -> EntityType.Builder.of(AirdropEntity::new, MobCategory.MISC)
                     .sized(2.0F, 2.0F)  // 设置碰撞箱大小
                     .clientTrackingRange(10)
                     .updateInterval(3)

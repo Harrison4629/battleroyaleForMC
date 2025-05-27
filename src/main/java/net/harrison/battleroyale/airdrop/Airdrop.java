@@ -79,7 +79,7 @@ public class Airdrop {
         );
         
         // 延迟2秒后生成空投
-        scheduler.schedule(() -> server.execute(() -> spawnAirdrop(server, airdropPos)), 1, TimeUnit.SECONDS);
+        scheduler.schedule(() -> server.execute(() -> spawnAirdrop(server, airdropPos)), 2, TimeUnit.SECONDS);
     }
 
     //清除世界中所有的空投实体
