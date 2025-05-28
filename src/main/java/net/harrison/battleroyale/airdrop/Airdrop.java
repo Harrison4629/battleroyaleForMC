@@ -49,7 +49,7 @@ public class Airdrop {
         int y = (int) Math.round(position.y);
         int z = (int) Math.round(position.z);
 
-        // 在空投位置上方生成空投实体
+        // 上方50格生成空投实体
         AirdropEntity airdrop = new AirdropEntity(ModEntities.AIRDROP.get(), level);
         airdrop.setPos(x, y+50, z); // 从高空掉落
 
@@ -83,7 +83,6 @@ public class Airdrop {
         scheduler.schedule(() -> server.execute(() -> spawnAirdrop(server, airdropPos)), 5, TimeUnit.SECONDS);
     }
 
-    //清除世界中所有的空投实体
     public static void clearAllAirdrops(MinecraftServer server) {
         if (server == null) return;
         

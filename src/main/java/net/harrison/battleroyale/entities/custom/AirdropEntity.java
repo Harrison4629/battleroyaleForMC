@@ -1,6 +1,5 @@
 package net.harrison.battleroyale.entities.custom;
 
-import net.harrison.battleroyale.Battleroyale;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -40,7 +39,9 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
 
     private static final double FALL_SPEED = -0.05D; // 负值表示向下，可以调整这个值来控制速度
-    private static final double TERMINAL_VELOCITY = -0.1D; // 终端速度，防止无限加速
+    private static final double TERMINAL_VELOCITY = -0.2D; // 终端速度，防止无限加速
+    private final float AIRDROP_LUCKY_VALUE = 10.0f;
+
 
     private ResourceLocation lootTable;
     private long lootTableSeed;
@@ -67,7 +68,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!this.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
             this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, 1.0F);
 
             // 确保在玩家打开箱子前已经填充了物品
             this.unpackLootTable(player);
@@ -95,18 +96,16 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
      */
     public void unpackLootTable(Player player) {
         if (this.lootTable != null && this.level.getServer() != null) {
-            LootTable loottable = this.level.getServer().getLootTables().get(this.lootTable);
+            LootTable lootTable = this.level.getServer().getLootTables().get(this.lootTable);
             if (player instanceof ServerPlayer) {
                 LootContext.Builder lootcontext_builder =
                         (new LootContext.Builder((ServerLevel)this.level))
                                 .withParameter(LootContextParams.ORIGIN, this.position())
-                                .withOptionalRandomSeed(this.lootTableSeed);
-
-                // 如果玩家不为空，添加玩家作为上下文
-                lootcontext_builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
+                                .withOptionalRandomSeed(this.lootTableSeed)
+                                .withLuck(AIRDROP_LUCKY_VALUE);
 
                 LootContext lootparams = lootcontext_builder.create(LootContextParamSets.CHEST);
-                loottable.fill(this, lootparams);
+                lootTable.fill(this, lootparams);
             }
 
             this.lootTable = null;
@@ -121,53 +120,39 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         // 客户端粒子效果
         if (this.level.isClientSide) {
             if (!hasLanded()) {
-                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D, this.getY() +2.3D + this.random.nextDouble() * 0.5D, this.getZ() + this.random.nextDouble() * 0.5D - 0.25D, 0.0D, 0.0D, 0.0D);
+                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
+                        this.getY() +2.3D + this.random.nextDouble() * 0.5D,
+                        this.getZ() + this.random.nextDouble() * 0.5D - 0.25D,
+                        0.0D, 0.01D, 0.0D);
+                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
+                        this.getY() +3.0D + this.random.nextDouble() * 0.5D,
+                        this.getZ() + this.random.nextDouble() * 0.3D - 0.15D,
+                        0.0D, 0.05D, 0.0D);
+                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
+                        this.getY() +3.7D + this.random.nextDouble() * 0.5D,
+                        this.getZ() + this.random.nextDouble() * 0.2D - 0.15D,
+                        0.0D, 0.1D, 0.0D);
             }
         }
 
-        // 核心逻辑：无论是下落中还是已落地，都需要持续检查是否在地面上
-        // 关键点：不再依赖 hasLanded() 来完全阻止下落逻辑的执行
-        Vec3 motion = this.getDeltaMovement();
 
-        // 如果不在地面上，并且还没有达到终端速度，就继续下落
-        if (!this.onGround) {
-            // 如果之前是落地状态，现在又不在地面上了，说明失去了支撑，重新开始下落
-            if (hasLanded()) {
-                setHasLanded(false); // 重置落地状态
-                // 此时可以播放一些重新开始下落的音效或效果
-            }
-
-            // 增加向下的速度（重力模拟）
-            motion = motion.add(0.0D, FALL_SPEED, 0.0D);
-
+        Vec3 fall = this.getDeltaMovement();
+        if (hasLanded()) {
+            this.level.playSound(null, this.blockPosition(), SoundEvents.WOOD_FALL,
+                    SoundSource.NEUTRAL, 1.0F, 1.0F);
+            fall = Vec3.ZERO;
+        } else {
+            fall = fall.add(0.0D, FALL_SPEED, 0.0D);
             // 限制下落速度，防止过快
-            if (motion.y < TERMINAL_VELOCITY) {
-                motion = new Vec3(motion.x, TERMINAL_VELOCITY, motion.z);
+            if (fall.y < TERMINAL_VELOCITY) {
+                fall = new Vec3(fall.x, TERMINAL_VELOCITY, fall.z);
             }
-
-        } else { // 如果在地面上
-            // 如果之前不是落地状态，现在在地面上了，说明刚刚落地
-            if (!hasLanded()) {
-                this.setHasLanded(true); // 设置空投已落地
-                // 可以在这里添加一些落地时的效果，比如音效或爆炸粒子
-                if (!this.level.isClientSide) {
-                    // 服务器端处理落地事件，例如生成拾取物或播放音效
-                    //this.level.playSound(null, this.blockPosition(), SoundEvents.WOOD_FALL, SoundSource.NEUTRAL, 1.0F, 1.0F);
-
-                    // 空投落地后，尝试填充物品（即使没有玩家交互）
-                    if (this.lootTable != null) {
-                        this.unpackLootTable(null);
-                    }
-                }
-            }
-            // 落地后速度归零
-            motion = Vec3.ZERO;
         }
 
-        this.setDeltaMovement(motion); // 设置新的速度
+        this.setDeltaMovement(fall); // 设置新的速度
         this.move(MoverType.SELF, this.getDeltaMovement()); // 实际移动实体并处理碰撞
-
     }
+
 
     @Override
     public ItemStack getItem(int index) {
@@ -223,7 +208,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("entity." + Battleroyale.MODID + ".airdrop");
+        return Component.translatable("entity.battleroyale.airdrop");
     }
 
     @Override
@@ -288,7 +273,6 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         this.entityData.define(HAS_LANDED, false);
     }
 
-    @SuppressWarnings("removal")
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         // 从NBT中读取数据，当世界加载时调用
