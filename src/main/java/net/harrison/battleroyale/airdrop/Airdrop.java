@@ -58,7 +58,8 @@ public class Airdrop {
         airdrop.setLootTable(lootTableId, level.random.nextLong());
 
         // 将实体添加到世界
-            
+        level.addFreshEntity(airdrop);
+
         // 在聊天中广播空投位置
         server.getPlayerList().broadcastSystemMessage(
             Component.literal(String.format("§e§l空投已降落在 x:%d z:%d 附近！", x, z)),
@@ -78,8 +79,8 @@ public class Airdrop {
             false
         );
         
-        // 延迟2秒后生成空投
-        scheduler.schedule(() -> server.execute(() -> spawnAirdrop(server, airdropPos)), 2, TimeUnit.SECONDS);
+        // 延迟5秒后生成空投
+        scheduler.schedule(() -> server.execute(() -> spawnAirdrop(server, airdropPos)), 5, TimeUnit.SECONDS);
     }
 
     //清除世界中所有的空投实体
