@@ -43,7 +43,7 @@
     "damage": 12.5,
     "item": "cgm:shell",
     "life": 4,
-    "size": 0.2,
+    "size": 1.0,
     "speed": 5.0,
     "damageReduceOverLife": true
   },

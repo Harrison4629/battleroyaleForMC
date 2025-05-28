@@ -23,7 +23,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<AirdropEntity>> AIRDROP = ENTITY_TYPES.register("airdrop",
             () -> EntityType.Builder.of(AirdropEntity::new, MobCategory.MISC)
-                    .sized(2.0F, 2.0F)  // 设置碰撞箱大小
+                    .sized(2.0F, 2.2F)  // 设置碰撞箱大小
                     .clientTrackingRange(10)
                     .updateInterval(3)
                     .fireImmune()  // 使实体防火
