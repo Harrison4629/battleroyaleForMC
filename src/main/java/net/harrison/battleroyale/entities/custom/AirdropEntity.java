@@ -40,7 +40,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
 
     private static final double FALL_SPEED = -0.05D; // 负值表示向下，可以调整这个值来控制速度
     private static final double TERMINAL_VELOCITY = -0.2D; // 终端速度，防止无限加速
-    private final float AIRDROP_LUCKY_VALUE = 10.0f;
+    private final float AIRDROP_LUCKY_VALUE = 1.0f;
 
 
     private ResourceLocation lootTable;
