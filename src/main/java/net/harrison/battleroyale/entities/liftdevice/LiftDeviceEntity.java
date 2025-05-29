@@ -2,17 +2,26 @@ package net.harrison.battleroyale.entities.liftdevice;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class LiftDeviceEntity extends Entity {
     private static final EntityDataAccessor<Float> HEALTH = SynchedEntityData.defineId(LiftDeviceEntity.class, EntityDataSerializers.FLOAT);
-    private static final float MAX_HEALTH = 40.0F;
+    private static final float MAX_HEALTH = 20.0F;
+    private static final int LAST_TIME = 200;
 
     public LiftDeviceEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -24,21 +33,34 @@ public class LiftDeviceEntity extends Entity {
     public void tick() {
         super.tick();
 
+        if (this.tickCount >= LAST_TIME) {
+            this.remove(RemovalReason.KILLED);
+            return;
+        }
+
         // 客户端粒子效果
         if (this.level.isClientSide) {
-            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.3D - 0.15D,
-                    this.getY() +0.6D + this.random.nextDouble() * 0.3D,
-                    this.getZ() + this.random.nextDouble() * 0.3D - 0.15D,
-                    0.0D, 0.01D, 0.0D);
-            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.3D - 0.15D,
-                    this.getY() +1.1D + this.random.nextDouble() * 0.2D,
-                    this.getZ() + this.random.nextDouble() * 0.3D - 0.15D,
-                    0.0D, 0.05D, 0.0D);
-            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.2D - 0.15D,
-                    this.getY() +1.6D + this.random.nextDouble() * 0.3D,
-                    this.getZ() + this.random.nextDouble() * 0.2D - 0.15D,
-                    0.0D, 0.1D, 0.0D);
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX() + this.random.nextDouble() * 0.5D - 0.15D,
+                    this.getY() +0.3D,
+                    this.getZ() + this.random.nextDouble() * 0.5D - 0.15D,
+                    0.0D, 0.5D, 0.0D);
+        }
 
+        if (this.level instanceof ServerLevel level) {
+            for (Player player : level.players())
+            {
+
+                Vec3 distance = player.position().vectorTo(this.position());
+                Vec3 verdistance = new Vec3(distance.x, 0, distance.z);
+
+
+                if (distance.y>=-5 && distance.y<=0 && verdistance.length()<=1 && player.getDeltaMovement().y < 1.3) {
+                    Vec3 speed = player.getDeltaMovement();
+                    Vec3 delta = new Vec3(1.5 * speed.x, 1.3, 1.5 * speed.z);
+                    player.setDeltaMovement(delta);
+                    player.hurtMarked = true;
+                }
+            }
         }
     }
 

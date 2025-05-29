@@ -129,7 +129,6 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
 
         }
 
-
         Vec3 fall = this.getDeltaMovement();
         if (hasLanded()) {
             fall = Vec3.ZERO;
@@ -156,7 +155,6 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         this.setDeltaMovement(fall); // 设置新的速度
         this.move(MoverType.SELF, this.getDeltaMovement()); // 实际移动实体并处理碰撞
 }
-
 
     @Override
     public ItemStack getItem(int index) {
