@@ -2,7 +2,6 @@ package net.harrison.battleroyale.networking.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
@@ -43,7 +42,6 @@ public class LiftS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            // 获取发送数据包的玩家
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null) {
                 Vec3 delta = new Vec3(speedX, speedY, speedZ);
@@ -52,6 +50,4 @@ public class LiftS2CPacket {
         });
         context.setPacketHandled(true);
     }
-
-
 }
