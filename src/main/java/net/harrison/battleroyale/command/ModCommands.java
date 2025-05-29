@@ -2,7 +2,7 @@ package net.harrison.battleroyale.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.harrison.battleroyale.airdrop.Airdrop;
+import net.harrison.battleroyale.event.AirdropEvent;
 import net.harrison.battleroyale.zone.ZoneManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -29,7 +29,7 @@ public class ModCommands {
             .then(Commands.literal("stop")
                 .executes(context -> {
                     ZoneManager.stopShrinking(context.getSource());
-                    Airdrop.clearAllAirdrops(context.getSource().getServer());
+                    AirdropEvent.clearAllAirdrops(context.getSource().getServer());
                     return 1;
                 })
             )

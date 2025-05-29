@@ -1,7 +1,7 @@
-package net.harrison.battleroyale.airdrop;
+package net.harrison.battleroyale.event;
 
 import net.harrison.battleroyale.entities.ModEntities;
-import net.harrison.battleroyale.entities.custom.AirdropEntity;
+import net.harrison.battleroyale.entities.airdrop.AirdropEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * 空投系统管理类
  * 负责在游戏中的特定时刻生成空投，提供高级物资给玩家
  */
-public class Airdrop {
+public class AirdropEvent {
     // 随机数生成器
     private static final Random random = new Random();
 

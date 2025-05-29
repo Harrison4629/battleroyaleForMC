@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.entities.custom;
+package net.harrison.battleroyale.entities.airdrop;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -121,7 +121,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         if (this.level.isClientSide) {
             if (!hasLanded()) {
                 this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
-                        this.getY() +2.3D + this.random.nextDouble() * 0.5D,
+                        this.getY() +2.5D + this.random.nextDouble() * 0.5D,
                         this.getZ() + this.random.nextDouble() * 0.5D - 0.25D,
                         0.0D, 0.01D, 0.0D);
                 this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
@@ -135,7 +135,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
             }
         }
 
-
+        
         Vec3 fall = this.getDeltaMovement();
         if (hasLanded()) {
             this.level.playSound(null, this.blockPosition(), SoundEvents.WOOD_FALL,
@@ -145,13 +145,25 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
             fall = fall.add(0.0D, FALL_SPEED, 0.0D);
             // 限制下落速度，防止过快
             if (fall.y < TERMINAL_VELOCITY) {
-                fall = new Vec3(fall.x, TERMINAL_VELOCITY, fall.z);
+                fall = new Vec3(0, TERMINAL_VELOCITY, 0);
             }
-        }
+            
+            // 添加水平方向的阻力，让空投的水平移动逐渐减慢
+            double horizontalDrag = 0.7; // 水平阻力系数，可以根据需要调整，数值越大阻力越小
+            fall = new Vec3(
+                    fall.x * horizontalDrag,
+                    fall.y,
+                    fall.z * horizontalDrag
+        );
+        
+        // 如果水平速度很小，则认为已经停止水平移动
+        if (Math.abs(fall.x) < 0.003) fall = new Vec3(0, fall.y, fall.z);
+        if (Math.abs(fall.z) < 0.003) fall = new Vec3(fall.x, fall.y, 0);
+    }
 
         this.setDeltaMovement(fall); // 设置新的速度
         this.move(MoverType.SELF, this.getDeltaMovement()); // 实际移动实体并处理碰撞
-    }
+}
 
 
     @Override
@@ -321,4 +333,3 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
         }
     }
 }
-

@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.entities.custom;// Made with Blockbench 4.12.4
+package net.harrison.battleroyale.entities.airdrop;// Made with Blockbench 4.12.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 

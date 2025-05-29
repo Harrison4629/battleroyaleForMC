@@ -1,9 +1,9 @@
 package net.harrison.battleroyale.entities;
 
 import net.harrison.battleroyale.Battleroyale;
-import net.harrison.battleroyale.entities.custom.AirdropEntity;
-import net.harrison.battleroyale.entities.custom.AirdropModel;
-import net.harrison.battleroyale.entities.custom.AirdropRenderer;
+import net.harrison.battleroyale.entities.airdrop.AirdropEntity;
+import net.harrison.battleroyale.entities.airdrop.AirdropModel;
+import net.harrison.battleroyale.entities.airdrop.AirdropRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;

@@ -1,6 +1,6 @@
 package net.harrison.battleroyale.zone;
 
-import net.harrison.battleroyale.airdrop.Airdrop;
+import net.harrison.battleroyale.event.AirdropEvent;
 import net.harrison.battleroyale.config.ZoneConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -351,7 +351,7 @@ public class ZoneManager {
                 for(int i = 0; i < numOfAirdrop; i++) {
                     safeSubmit(server, () -> {
                         // 通过Airdrop类调度空投生成
-                        Airdrop.scheduleAirdrop(
+                        AirdropEvent.scheduleAirdrop(
                                 server, scheduler, zoneCenterX, zoneCenterY, zoneCenterZ, currentZoneSize);
                     });
                 }
