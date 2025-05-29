@@ -25,8 +25,8 @@ public class AirdropRenderer extends EntityRenderer<AirdropEntity> {
         poseStack.pushPose();
 
 
-        poseStack.translate(0.0F, 0.0F, 0.0F); // 调整高度，使模型居中
-        poseStack.scale(1.0F, 1.0F, 1.0F);
+        //poseStack.translate(0.0F, 0.0F, 0.0F); 调整相对位置
+        //poseStack.scale(1.0F, 1.0F, 1.0F);
 
         // 根据实体的朝向旋转
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - entityYaw));

@@ -1,11 +1,11 @@
 package net.harrison.battleroyale.items;
 
 import net.harrison.battleroyale.Battleroyale;
-import net.harrison.battleroyale.items.custom.*;
-import net.harrison.battleroyale.items.custom.armorplate.ArmorPlateItem1;
-import net.harrison.battleroyale.items.custom.armorplate.ArmorPlateItem2;
-import net.harrison.battleroyale.items.custom.armorplate.ArmorPlateItem3;
-import net.harrison.battleroyale.items.custom.armorplate.ArmorPlateItem4;
+import net.harrison.battleroyale.items.rightHoldItem.*;
+import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem1;
+import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem2;
+import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem3;
+import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem4;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

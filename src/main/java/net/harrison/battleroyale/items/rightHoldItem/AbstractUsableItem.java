@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.items.custom;
+package net.harrison.battleroyale.items.rightHoldItem;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

@@ -1,6 +1,6 @@
-package net.harrison.battleroyale.items.custom.armorplate;
+package net.harrison.battleroyale.items.rightHoldItem.armorplate;
 
-import net.harrison.battleroyale.items.custom.AbstractUsableItem;
+import net.harrison.battleroyale.items.rightHoldItem.AbstractUsableItem;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
@@ -11,12 +11,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
-public class ArmorPlateItem3 extends AbstractUsableItem {
-    private static final int USE_DURATION = 30;
-    private static final int ABSORPTION_VALUE = 3;
+public class ArmorPlateItem1 extends AbstractUsableItem {
+    private static final int USE_DURATION = 20;
+    private static final int ABSORPTION_VALUE = 1;
     private static final int COOLDOWN_TICKS = 40;
 
-    public ArmorPlateItem3(Properties properties) {
+    public ArmorPlateItem1(Properties properties) {
         super(properties, USE_DURATION, COOLDOWN_TICKS);
     }
 
@@ -29,17 +29,17 @@ public class ArmorPlateItem3 extends AbstractUsableItem {
 
     @Override
     protected String getFailTranslationKey() {
-        return "item.battleroyale.armor_plate_3.use_fail";
+        return "item.battleroyale.armor_plate_1.use_fail";
     }
 
     @Override
     protected String getTooltipTranslationKey() {
-        return "item.battleroyale.armor_plate_3.tooltip";
+        return "item.battleroyale.armor_plate_1.tooltip";
     }
 
     @Override
     protected String getUseTooltipTranslationKey() {
-        return "item.battleroyale.armor_plate_3.tooltip.use";
+        return "item.battleroyale.armor_plate_1.tooltip.use";
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ArmorPlateItem3 extends AbstractUsableItem {
 
     @Override
     protected SoundEvent getFinishSound() {
-        return SoundEvents.ARMOR_EQUIP_DIAMOND;
+        return SoundEvents.ARMOR_EQUIP_LEATHER;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.harrison.battleroyale.items.custom;
+package net.harrison.battleroyale.items.rightHoldItem;
 
 import net.harrison.battleroyale.util.PhaseTracker;
 import net.minecraft.core.particles.ParticleOptions;

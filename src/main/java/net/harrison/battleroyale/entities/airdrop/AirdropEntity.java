@@ -58,11 +58,6 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     }
 
 
-    // 设置空投落地状态的方法
-    public void setHasLanded(boolean landed) {
-        this.entityData.set(HAS_LANDED, landed);
-    }
-
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
@@ -119,27 +114,24 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
 
         // 客户端粒子效果
         if (this.level.isClientSide) {
-            if (!hasLanded()) {
-                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
-                        this.getY() +2.5D + this.random.nextDouble() * 0.5D,
-                        this.getZ() + this.random.nextDouble() * 0.5D - 0.25D,
-                        0.0D, 0.01D, 0.0D);
-                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
-                        this.getY() +3.0D + this.random.nextDouble() * 0.5D,
-                        this.getZ() + this.random.nextDouble() * 0.3D - 0.15D,
-                        0.0D, 0.05D, 0.0D);
-                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
-                        this.getY() +3.7D + this.random.nextDouble() * 0.5D,
-                        this.getZ() + this.random.nextDouble() * 0.2D - 0.15D,
-                        0.0D, 0.1D, 0.0D);
-            }
+            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.25D,
+                    this.getY() +2.5D + this.random.nextDouble() * 0.5D,
+                    this.getZ() + this.random.nextDouble() * 0.5D - 0.25D,
+                    0.0D, 0.01D, 0.0D);
+            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.3D - 0.15D,
+                    this.getY() +3.0D + this.random.nextDouble() * 0.5D,
+                    this.getZ() + this.random.nextDouble() * 0.3D - 0.15D,
+                    0.0D, 0.05D, 0.0D);
+            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.2D - 0.15D,
+                    this.getY() +3.7D + this.random.nextDouble() * 0.5D,
+                    this.getZ() + this.random.nextDouble() * 0.2D - 0.15D,
+                    0.0D, 0.1D, 0.0D);
+
         }
 
-        
+
         Vec3 fall = this.getDeltaMovement();
         if (hasLanded()) {
-            this.level.playSound(null, this.blockPosition(), SoundEvents.WOOD_FALL,
-                    SoundSource.NEUTRAL, 1.0F, 1.0F);
             fall = Vec3.ZERO;
         } else {
             fall = fall.add(0.0D, FALL_SPEED, 0.0D);
@@ -255,7 +247,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     }
 
     @Override
-    public boolean canCollideWith(Entity pEntity) {
+    public boolean canCollideWith(Entity entity) {
         return true;
     }
 
@@ -288,7 +280,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         // 从NBT中读取数据，当世界加载时调用
-        this.setHasLanded(pCompound.getBoolean("HasLanded"));
+        this.entityData.set(HAS_LANDED, pCompound.getBoolean("HasLanded"));
 
         // 读取物品栏数据
         if (pCompound.contains("LootTable", 8)) {

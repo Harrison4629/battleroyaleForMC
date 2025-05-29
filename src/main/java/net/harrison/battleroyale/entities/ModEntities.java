@@ -4,6 +4,10 @@ import net.harrison.battleroyale.Battleroyale;
 import net.harrison.battleroyale.entities.airdrop.AirdropEntity;
 import net.harrison.battleroyale.entities.airdrop.AirdropModel;
 import net.harrison.battleroyale.entities.airdrop.AirdropRenderer;
+import net.harrison.battleroyale.entities.liftdevice.LiftDeviceEntity;
+import net.harrison.battleroyale.entities.liftdevice.LiftDeviceModel;
+import net.harrison.battleroyale.entities.liftdevice.LiftDeviceRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -29,6 +33,14 @@ public class ModEntities {
                     .fireImmune()  // 使实体防火
                     .build(new ResourceLocation(Battleroyale.MODID, "airdrop").toString()));
 
+    public static final RegistryObject<EntityType<LiftDeviceEntity>> LIFTDEVICE = ENTITY_TYPES.register("liftdevice",
+            () -> EntityType.Builder.of(LiftDeviceEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 0.2F)
+                    .clientTrackingRange(10)
+                    .updateInterval(3)
+                    .fireImmune()
+                    .build(new ResourceLocation(Battleroyale.MODID, "liftdevice").toString()));
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -36,10 +48,12 @@ public class ModEntities {
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(AIRDROP.get(), AirdropRenderer::new);
+        event.registerEntityRenderer(LIFTDEVICE.get(), LiftDeviceRenderer::new);
     }
 
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(AirdropModel.LAYER_LOCATION, AirdropModel::createBodyLayer);
+        event.registerLayerDefinition(LiftDeviceModel.LAYER_LOCATION, LiftDeviceModel::createBodyLayer);
     }
 }
