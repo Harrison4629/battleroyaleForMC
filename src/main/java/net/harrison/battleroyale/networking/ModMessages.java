@@ -1,6 +1,7 @@
 package net.harrison.battleroyale.networking;
 
 import net.harrison.battleroyale.Battleroyale;
+import net.harrison.battleroyale.networking.packet.LiftS2CPacket;
 import net.harrison.battleroyale.networking.packet.PhasingDurationS2CPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingS2CPacket;
@@ -76,6 +77,12 @@ public class ModMessages {
                 .decoder(PhasingDurationS2CPacket::new)
                 .encoder(PhasingDurationS2CPacket::toBytes)
                 .consumerMainThread(PhasingDurationS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(LiftS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(LiftS2CPacket::new)
+                .encoder(LiftS2CPacket::toBytes)
+                .consumerMainThread(LiftS2CPacket::handle)
                 .add();
     }
     

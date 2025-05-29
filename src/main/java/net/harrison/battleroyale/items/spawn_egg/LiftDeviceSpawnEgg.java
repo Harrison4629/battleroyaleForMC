@@ -60,29 +60,6 @@ public class LiftDeviceSpawnEgg extends Item {
         return InteractionResult.CONSUME;
     }
 
-    //@Override
-    //public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-    //    ItemStack stack = player.getItemInHand(hand);
-//
-    //    // 在玩家看向的位置生成实体
-    //    BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-    //    if (hitResult.getType() != HitResult.Type.BLOCK) {
-    //        return InteractionResultHolder.pass(stack);
-    //    }
-//
-    //    if (!(level instanceof ServerLevel)) {
-    //        return InteractionResultHolder.success(stack);
-    //    }
-//
-    //    if (hitResult.getType() == HitResult.Type.BLOCK) {
-    //        UseOnContext context = new UseOnContext(player, hand, hitResult);
-    //        InteractionResult result = this.useOn(context);
-    //        return new InteractionResultHolder<>(result, stack);
-    //    }
-//
-    //    return InteractionResultHolder.pass(stack);
-    //}
-
     public int getBackgroundColor() {
         return backgroundColor;
     }

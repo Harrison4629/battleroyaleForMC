@@ -1,0 +1,57 @@
+package net.harrison.battleroyale.networking.packet;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
+
+public class LiftS2CPacket {
+
+    private final double speedX;
+    private final double speedY;
+    private final double speedZ;
+
+    public LiftS2CPacket() {
+        this.speedX = 0;
+        this.speedY = 0;
+        this.speedZ = 0;
+
+    }
+
+    public LiftS2CPacket(Vec3 delta) {
+        this.speedX = delta.x;
+        this.speedY = delta.y;
+        this.speedZ = delta.z;
+
+    }
+
+    public LiftS2CPacket(FriendlyByteBuf buf) {
+        this.speedX = buf.readDouble();
+        this.speedY = buf.readDouble();
+        this.speedZ = buf.readDouble();
+    }
+
+    public void toBytes(FriendlyByteBuf buf) {
+        buf.writeDouble(speedX);
+        buf.writeDouble(speedY);
+        buf.writeDouble(speedZ);
+
+    }
+
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context context = supplier.get();
+        context.enqueueWork(() -> {
+            // 获取发送数据包的玩家
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null) {
+                Vec3 delta = new Vec3(speedX, speedY, speedZ);
+                mc.player.setDeltaMovement(delta);
+            }
+        });
+        context.setPacketHandled(true);
+    }
+
+
+}

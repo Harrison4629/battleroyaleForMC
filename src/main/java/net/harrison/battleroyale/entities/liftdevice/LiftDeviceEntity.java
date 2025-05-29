@@ -1,5 +1,7 @@
 package net.harrison.battleroyale.entities.liftdevice;
 
+import net.harrison.battleroyale.networking.ModMessages;
+import net.harrison.battleroyale.networking.packet.LiftS2CPacket;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -8,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -47,18 +50,18 @@ public class LiftDeviceEntity extends Entity {
         }
 
         if (this.level instanceof ServerLevel level) {
-            for (Player player : level.players())
+            for (ServerPlayer player : level.players())
             {
 
                 Vec3 distance = player.position().vectorTo(this.position());
                 Vec3 verdistance = new Vec3(distance.x, 0, distance.z);
 
 
-                if (distance.y>=-5 && distance.y<=0 && verdistance.length()<=1 && player.getDeltaMovement().y < 1.3) {
+                if (distance.y>=-5 && distance.y<=0 && verdistance.length()<=0.8 && player.getDeltaMovement().y < 1.2) {
                     Vec3 speed = player.getDeltaMovement();
-                    Vec3 delta = new Vec3(1.5 * speed.x, 1.3, 1.5 * speed.z);
+                    Vec3 delta = new Vec3(1.8 * speed.x, 1.2, 1.8 * speed.z);
                     player.setDeltaMovement(delta);
-                    player.hurtMarked = true;
+                    ModMessages.sendToPlayer(new LiftS2CPacket(delta), player);
                 }
             }
         }
