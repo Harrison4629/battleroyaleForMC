@@ -1,6 +1,6 @@
-package net.harrison.battleroyale.items.rightHoldItem.armorplate;
+package net.harrison.battleroyale.items.right_hold_item.armorplate;
 
-import net.harrison.battleroyale.items.rightHoldItem.AbstractUsableItem;
+import net.harrison.battleroyale.items.right_hold_item.AbstractUsableItem;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;

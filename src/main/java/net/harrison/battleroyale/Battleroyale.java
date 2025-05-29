@@ -69,10 +69,10 @@ public class Battleroyale {
                             event.getServer().createCommandSourceStack().withSuppressedOutput(),
                         "scoreboard objectives setdisplay sidebar zone"
                     );
-                event.getServer().getCommands().performPrefixedCommand(
+                    event.getServer().getCommands().performPrefixedCommand(
                         event.getServer().createCommandSourceStack().withSuppressedOutput(),
                         "scoreboard players set -------- zone 0"
-                );
+                    );
             }
         });
     }
@@ -97,6 +97,7 @@ public class Battleroyale {
             event.accept(ModItems.ARMOR_PLATE_3.get());
             event.accept(ModItems.ARMOR_PLATE_4.get());
             event.accept(ModItems.PHASE_CORE.get());
+            event.accept(ModItems.LIFT_DEVICE_SPAWN_EGG.get());
         }
     }
 }

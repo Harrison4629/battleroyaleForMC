@@ -54,5 +54,7 @@
   "item.battleroyale.phase_core.trace_back": "位移结束，已返回原位！",
 
   "key.categories.battleroyale": "大逃杀按键绑定",
-  "key.battleroyale.stop_phasing": "停止传送"
+  "key.battleroyale.stop_phasing": "停止传送",
+
+  "item.battleroyale.lift_device_spawn_egg": "升空装置"
 }

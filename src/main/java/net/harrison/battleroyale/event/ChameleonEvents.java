@@ -1,6 +1,6 @@
 package net.harrison.battleroyale.event;
 
-import net.harrison.battleroyale.items.rightHoldItem.ChameleonItem;
+import net.harrison.battleroyale.items.right_hold_item.ChameleonItem;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;

@@ -55,6 +55,8 @@
   "item.battleroyale.phase_core.trace_back": "Teleportation ended, returned to original position!",
 
   "key.categories.battleroyale": "Battle Royale KeyBinding",
-  "key.battleroyale.stop_phasing": "Stop Phasing"
+  "key.battleroyale.stop_phasing": "Stop Phasing",
+
+  "item.battleroyale.lift_device_spawn_egg": "Lift Device"
 
 }

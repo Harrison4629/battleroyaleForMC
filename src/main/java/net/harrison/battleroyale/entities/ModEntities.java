@@ -7,7 +7,6 @@ import net.harrison.battleroyale.entities.airdrop.AirdropRenderer;
 import net.harrison.battleroyale.entities.liftdevice.LiftDeviceEntity;
 import net.harrison.battleroyale.entities.liftdevice.LiftDeviceModel;
 import net.harrison.battleroyale.entities.liftdevice.LiftDeviceRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;

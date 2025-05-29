@@ -1,11 +1,13 @@
 package net.harrison.battleroyale.items;
 
 import net.harrison.battleroyale.Battleroyale;
-import net.harrison.battleroyale.items.rightHoldItem.*;
-import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem1;
-import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem2;
-import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem3;
-import net.harrison.battleroyale.items.rightHoldItem.armorplate.ArmorPlateItem4;
+import net.harrison.battleroyale.entities.ModEntities;
+import net.harrison.battleroyale.items.right_hold_item.*;
+import net.harrison.battleroyale.items.right_hold_item.armorplate.ArmorPlateItem1;
+import net.harrison.battleroyale.items.right_hold_item.armorplate.ArmorPlateItem2;
+import net.harrison.battleroyale.items.right_hold_item.armorplate.ArmorPlateItem3;
+import net.harrison.battleroyale.items.right_hold_item.armorplate.ArmorPlateItem4;
+import net.harrison.battleroyale.items.spawn_egg.LiftDeviceSpawnEgg;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,5 +34,7 @@ public class ModItems {
             () -> new ArmorPlateItem4(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> PHASE_CORE = ITEMS.register("phase_core",
             () -> new PhaseCoreItem(new Item.Properties().stacksTo(3)));
+    public static final RegistryObject<Item> LIFT_DEVICE_SPAWN_EGG = ITEMS.register("lift_device_spawn_egg",
+            () -> new LiftDeviceSpawnEgg(ModEntities.LIFTDEVICE, 0xD57E36, 0x1D0D00, new Item.Properties().stacksTo(3)));
 
 }

@@ -63,7 +63,7 @@ public class AirdropEntity extends Entity implements Container, MenuProvider{
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!this.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
             this.level.playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.5F, 1.0F);
+                    SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 0.3F, 1.0F);
 
             // 确保在玩家打开箱子前已经填充了物品
             this.unpackLootTable(player);

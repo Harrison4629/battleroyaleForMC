@@ -2,7 +2,7 @@ package net.harrison.battleroyale.event;
 
 import net.harrison.battleroyale.Battleroyale;
 import net.harrison.battleroyale.client.sound.UsingSoundManager;
-import net.harrison.battleroyale.items.rightHoldItem.AbstractUsableItem;
+import net.harrison.battleroyale.items.right_hold_item.AbstractUsableItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
