@@ -21,7 +21,7 @@ public class ModItems {
     public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage",
             () -> new BandageItem(new Item.Properties().stacksTo(8)));
     public static final RegistryObject<Item> REGENERATION_SYRINGE = ITEMS.register("regeneration_syringe",
-            () -> new RegenerationSyringeItem(new Item.Properties().stacksTo(2)));
+            () -> new RegenerationSyringeItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> CHAMELEON = ITEMS.register("chameleon",
             () -> new ChameleonItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ARMOR_PLATE_1 = ITEMS.register("armor_plate_1",
@@ -35,6 +35,6 @@ public class ModItems {
     public static final RegistryObject<Item> PHASE_CORE = ITEMS.register("phase_core",
             () -> new PhaseCoreItem(new Item.Properties().stacksTo(3)));
     public static final RegistryObject<Item> LIFT_DEVICE_SPAWN_EGG = ITEMS.register("lift_device_spawn_egg",
-            () -> new LiftDeviceSpawnEgg(ModEntities.LIFTDEVICE, 0xD57E36, 0x1D0D00, new Item.Properties().stacksTo(3)));
+            () -> new LiftDeviceSpawnEgg(ModEntities.LIFTDEVICE, new Item.Properties().stacksTo(2)));
 
 }

@@ -12,13 +12,6 @@ public class LiftS2CPacket {
     private final double speedY;
     private final double speedZ;
 
-    public LiftS2CPacket() {
-        this.speedX = 0;
-        this.speedY = 0;
-        this.speedZ = 0;
-
-    }
-
     public LiftS2CPacket(Vec3 delta) {
         this.speedX = delta.x;
         this.speedY = delta.y;
@@ -36,7 +29,6 @@ public class LiftS2CPacket {
         buf.writeDouble(speedX);
         buf.writeDouble(speedY);
         buf.writeDouble(speedZ);
-
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {

@@ -4,31 +4,22 @@ import net.harrison.battleroyale.entities.liftdevice.LiftDeviceEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 
 public class LiftDeviceSpawnEgg extends Item {
     private final Supplier<EntityType<?>> typeSupplier;
-    private final int backgroundColor;
-    private final int highlightColor;
 
-    public LiftDeviceSpawnEgg(RegistryObject<EntityType<LiftDeviceEntity>> type, int backgroundColor, int highlightColor, Properties props) {
+    public LiftDeviceSpawnEgg(RegistryObject<EntityType<LiftDeviceEntity>> type, Properties props) {
         super(props);
         this.typeSupplier = type::get;
-        this.backgroundColor = backgroundColor;
-        this.highlightColor = highlightColor;
     }
 
     @Override
@@ -60,11 +51,6 @@ public class LiftDeviceSpawnEgg extends Item {
         return InteractionResult.CONSUME;
     }
 
-    public int getBackgroundColor() {
-        return backgroundColor;
-    }
 
-    public int getHighlightColor() {
-        return highlightColor;
-    }
+
 }
