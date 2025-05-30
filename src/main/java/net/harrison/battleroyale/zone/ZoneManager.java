@@ -396,10 +396,6 @@ public class ZoneManager {
 
     //停止缩圈系统
     public static void stopShrinking(CommandSourceStack source) {
-        if (!isRunning) {
-            source.sendFailure(Component.literal("§c缩圈系统未在运行！"));
-            return;
-        }
 
         // 取消所有任务并关闭调度器
         cancelAllTasksAndShutdown();
@@ -428,12 +424,5 @@ public class ZoneManager {
                  overworld.getWorldBorder().setSize(59999968);
              }
          });
-    }
-
-    //服务器关闭时清理所有资源
-    public static void cleanupAllWorlds() {
-        cancelAllTasksAndShutdown();
-        isRunning = false;
-        currentState = ZoneState.IDLE;
     }
 }
