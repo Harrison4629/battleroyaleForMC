@@ -2,6 +2,8 @@ package net.harrison.battleroyale.networking.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
@@ -36,6 +38,7 @@ public class LiftS2CPacket {
         context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null) {
+                mc.player.playSound(SoundEvents.FIRECHARGE_USE, 0.6F, 1.0F);
                 Vec3 delta = new Vec3(speedX, speedY, speedZ);
                 mc.player.setDeltaMovement(delta);
             }
