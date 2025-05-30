@@ -10,6 +10,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,13 +34,14 @@ public class LiftDeviceEntity extends Entity {
         super.tick();
 
         if (this.tickCount >= LAST_TIME) {
+            this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.BLOCKS, 0.8F, 0.6F);
             this.remove(RemovalReason.KILLED);
             return;
         }
 
         // 客户端粒子效果
         if (this.level.isClientSide) {
-            this.level.addParticle(ParticleTypes.SMOKE, this.getX() + this.random.nextDouble() * 0.5D - 0.15D,
+            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextDouble() * 0.5D - 0.15D,
                     this.getY() +0.3D,
                     this.getZ() + this.random.nextDouble() * 0.5D - 0.15D,
                     0.0D, 0.5D, 0.0D);
@@ -97,6 +100,7 @@ public class LiftDeviceEntity extends Entity {
 
         float currentHealth = this.getHealth();
         this.setHealth(currentHealth - amount);
+        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.METAL_HIT, SoundSource.BLOCKS, 0.8F, 0.5F);
         return true;
     }
 
