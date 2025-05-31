@@ -89,6 +89,7 @@ public class LiftDeviceEntity extends Entity {
     public void setHealth(float health) {
         this.entityData.set(HEALTH, Math.max(0.0F, Math.min(health, MAX_HEALTH)));
         if (health <= 0.0F && !this.isRemoved()) {
+            this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.BLOCKS, 0.8F, 0.6F);
             this.remove(RemovalReason.KILLED);
         }
     }
