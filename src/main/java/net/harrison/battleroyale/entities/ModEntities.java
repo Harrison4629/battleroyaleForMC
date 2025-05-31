@@ -27,7 +27,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<AirdropEntity>> AIRDROP = ENTITY_TYPES.register("airdrop",
             () -> EntityType.Builder.of(AirdropEntity::new, MobCategory.MISC)
                     .sized(2.0F, 2.2F)  // 设置碰撞箱大小
-                    .clientTrackingRange(10)
+                    .clientTrackingRange(200)
                     .updateInterval(3)
                     .fireImmune()  // 使实体防火
                     .build(new ResourceLocation(Battleroyale.MODID, "airdrop").toString()));
@@ -35,7 +35,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<LiftDeviceEntity>> LIFTDEVICE = ENTITY_TYPES.register("liftdevice",
             () -> EntityType.Builder.of(LiftDeviceEntity::new, MobCategory.MISC)
                     .sized(1.0F, 0.2F)
-                    .clientTrackingRange(10)
+                    .clientTrackingRange(20)
                     .updateInterval(3)
                     .fireImmune()
                     .build(new ResourceLocation(Battleroyale.MODID, "liftdevice").toString()));

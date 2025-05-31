@@ -51,7 +51,7 @@ public class AirdropEvent {
 
         // 上方50格生成空投实体
         AirdropEntity airdrop = new AirdropEntity(ModEntities.AIRDROP.get(), level);
-        airdrop.setPos(x, y+50, z); // 从高空掉落
+        airdrop.setPos(x, y+80, z); // 从高空掉落
 
         // 设置空投的战利品表
         ResourceLocation lootTableId = new ResourceLocation("battleroyale", "airdrop");

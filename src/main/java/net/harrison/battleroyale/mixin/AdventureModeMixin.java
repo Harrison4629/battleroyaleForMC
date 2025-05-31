@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -36,8 +37,8 @@ public class AdventureModeMixin {
                 this.gameModeForPlayer == GameType.ADVENTURE) {
 
             // 直接调用物品的useOn方法，完全绕过游戏模式检查
-            net.minecraft.world.item.context.UseOnContext useOnContext =
-                    new net.minecraft.world.item.context.UseOnContext(serverPlayer, hand, blockHitResult);
+            UseOnContext useOnContext =
+                    new UseOnContext(serverPlayer, hand, blockHitResult);
 
             InteractionResult result = itemStack.getItem().useOn(useOnContext);
             cir.setReturnValue(result);
