@@ -26,22 +26,22 @@
   "item.battleroyale.chameleon.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_1": "Basic Armor Plate",
-  "item.battleroyale.armor_plate_1.tooltip": "Basic Armor Plate, offering fundamental protection",
+  "item.battleroyale.armor_plate_1.tooltip": "offering fundamental protection",
   "item.battleroyale.armor_plate_1.tooltip.use": "Hold right-click to be invisible",
   "item.battleroyale.armor_plate_1.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_2": "Improved Armor Plate",
-  "item.battleroyale.armor_plate_2.tooltip": "Improved Armor Plate, an upgrade to the basic model, offering improved damage resistance and durability",
+  "item.battleroyale.armor_plate_2.tooltip": "an upgrade to the basic model, offering improved damage resistance and durability",
   "item.battleroyale.armor_plate_2.tooltip.use": "Hold right-click to be invisible",
   "item.battleroyale.armor_plate_2.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_3": "Advanced Armor Plate",
-  "item.battleroyale.armor_plate_3.tooltip": "Advanced Armor Plate, crafted from superior materials and cutting-edge technology, it offers significantly enhanced protection",
+  "item.battleroyale.armor_plate_3.tooltip": "crafted from superior materials and cutting-edge technology, it offers significantly enhanced protection",
   "item.battleroyale.armor_plate_3.tooltip.use": "Hold right-click to be invisible",
   "item.battleroyale.armor_plate_3.use_fail": "Right-click duration was too short!",
 
   "item.battleroyale.armor_plate_4": "Ultra Armor Plate",
-  "item.battleroyale.armor_plate_4.tooltip": "Ultra Armor Plate, forged by master artisans, its exceptional quality delivers paramount protection",
+  "item.battleroyale.armor_plate_4.tooltip": "forged by master artisans, its exceptional quality delivers paramount protection",
   "item.battleroyale.armor_plate_4.tooltip.use": "Hold right-click to be invisible",
   "item.battleroyale.armor_plate_4.use_fail": "Right-click duration was too short!",
 
@@ -57,6 +57,8 @@
   "key.categories.battleroyale": "Battle Royale KeyBinding",
   "key.battleroyale.stop_phasing": "Stop Phasing",
 
-  "item.battleroyale.lift_device_spawn_egg": "Lift Device"
+  "item.battleroyale.lift_device_spawn_egg": "Lift Device",
+  "item.battleroyale.lift_device_spawn_egg.tooltip": "A vertical leap device powered by intricate redstone engineering, designed for efficient and precise high-altitude deployment.",
+  "item.battleroyale.lift_device_spawn_egg.tooltip.use": "Place on ground, stand, and ascend!"
 
 }

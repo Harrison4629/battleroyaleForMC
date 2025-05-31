@@ -1,9 +1,9 @@
 package net.harrison.battleroyale.util;
 
-import net.harrison.battleroyale.networking.ModMessages;
-import net.harrison.battleroyale.networking.packet.PhasingDurationS2CPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
-import net.harrison.battleroyale.networking.packet.StopPhasingS2CPacket;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -56,14 +56,23 @@ public class PhaseTracker {
         if (phaseData.isFinished(player.tickCount) || StopPhasingC2SPacket.isKeyPressed(playerId)) {
     
             Vec3 originalPos = phaseData.getOriginalPosition();
-    
 
-            ModMessages.sendToPlayer(new StopPhasingS2CPacket(), player);
+
+            for (int i = 0; i < 32; i++) {
+                player.level.addParticle(
+                        ParticleTypes.PORTAL,
+                        player.getX() + (player.level.random.nextDouble() - 0.5) * 2,
+                        player.getY() + player.level.random.nextDouble() * 2,
+                        player.getZ() + (player.level.random.nextDouble() - 0.5) * 2,
+                        0, 0.1, 0);
+            }
 
             // 位移结束，返回原始位置
             player.moveTo(originalPos.x, originalPos.y, originalPos.z);
 
-            ModMessages.sendToPlayer(new StopPhasingS2CPacket(), player);
+            player.displayClientMessage(Component.translatable("item.battleroyale.phase_core.trace_back")
+                    .withStyle(ChatFormatting.BLUE), true);
+
 
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -77,8 +86,6 @@ public class PhaseTracker {
             // 按照方向和速度移动玩家
             Vec3 direction = phaseData.getDirection();
             float speed = phaseData.getMoveSpeed();
-
-            ModMessages.sendToPlayer(new PhasingDurationS2CPacket(), player);
 
             Vec3 movement = direction.scale(speed);
 

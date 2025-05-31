@@ -25,22 +25,22 @@
   "item.battleroyale.chameleon.use_fail": "按住的时间太短！",
 
   "item.battleroyale.armor_plate_1": "基础护甲板",
-  "item.battleroyale.armor_plate_1.tooltip": "基础护甲板，提供最基础的保护",
+  "item.battleroyale.armor_plate_1.tooltip": "提供最基础的保护",
   "item.battleroyale.armor_plate_1.tooltip.use": "按住右键以装备",
   "item.battleroyale.armor_plate_1.use_fail": "按住的时间太短！",
 
   "item.battleroyale.armor_plate_2": "改进型护甲板",
-  "item.battleroyale.armor_plate_2.tooltip": "改进护甲板，在基础之上进行强化，提供更好的抗击打能力和耐久性",
+  "item.battleroyale.armor_plate_2.tooltip": "在基础之上进行强化，提供更好的抗击打能力和耐久性",
   "item.battleroyale.armor_plate_2.tooltip.use": "按住右键以装备",
   "item.battleroyale.armor_plate_2.use_fail": "按住的时间太短！",
 
   "item.battleroyale.armor_plate_3": "高级护甲板",
-  "item.battleroyale.armor_plate_3.tooltip": "高级护甲板，采用更优异的材料或技术，提供显著增强的保护",
+  "item.battleroyale.armor_plate_3.tooltip": "采用更优异的材料或技术，提供显著增强的保护",
   "item.battleroyale.armor_plate_3.tooltip.use": "按住右键以装备",
   "item.battleroyale.armor_plate_3.use_fail": "按住的时间太短！",
 
   "item.battleroyale.armor_plate_4": "顶级护甲板",
-  "item.battleroyale.armor_plate_4.tooltip": "顶级护甲板，由顶级工匠打造，品质卓越，提供顶级的保护效果",
+  "item.battleroyale.armor_plate_4.tooltip": "由顶级工匠打造，品质卓越，提供顶级的保护效果",
   "item.battleroyale.armor_plate_4.tooltip.use": "按住右键以装备",
   "item.battleroyale.armor_plate_4.use_fail": "按住的时间太短！",
 
@@ -56,5 +56,7 @@
   "key.categories.battleroyale": "大逃杀按键绑定",
   "key.battleroyale.stop_phasing": "停止传送",
 
-  "item.battleroyale.lift_device_spawn_egg": "升空装置"
+  "item.battleroyale.lift_device_spawn_egg": "升空装置",
+  "item.battleroyale.lift_device_spawn_egg.tooltip": "由精密红石机械驱动的垂直跃迁装置，实现高效精准的高空部署",
+  "item.battleroyale.lift_device_spawn_egg.tooltip.use": "放置在地面上并站立，即可飞升！"
 }

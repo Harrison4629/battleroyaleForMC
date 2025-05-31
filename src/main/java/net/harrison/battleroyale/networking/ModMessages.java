@@ -2,9 +2,7 @@ package net.harrison.battleroyale.networking;
 
 import net.harrison.battleroyale.Battleroyale;
 import net.harrison.battleroyale.networking.packet.LiftS2CPacket;
-import net.harrison.battleroyale.networking.packet.PhasingDurationS2CPacket;
 import net.harrison.battleroyale.networking.packet.StopPhasingC2SPacket;
-import net.harrison.battleroyale.networking.packet.StopPhasingS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,19 +63,6 @@ public class ModMessages {
      * 注册服务器到客户端的数据包
      */
     private static void registerS2CPackets(SimpleChannel net) {
-        // 停止位移时触发粒子效果的数据包
-        net.messageBuilder(StopPhasingS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StopPhasingS2CPacket::new)
-                .encoder(StopPhasingS2CPacket::toBytes)
-                .consumerMainThread(StopPhasingS2CPacket::handle)
-                .add();
-        
-        // 位移持续时间的数据包
-        net.messageBuilder(PhasingDurationS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PhasingDurationS2CPacket::new)
-                .encoder(PhasingDurationS2CPacket::toBytes)
-                .consumerMainThread(PhasingDurationS2CPacket::handle)
-                .add();
 
         net.messageBuilder(LiftS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(LiftS2CPacket::new)
